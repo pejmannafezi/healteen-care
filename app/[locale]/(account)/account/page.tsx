@@ -1,8 +1,9 @@
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
-import { FileText, Truck, Package } from "lucide-react";
+import { FileText, Truck, Package, CalendarClock, Video, Phone } from "lucide-react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getMyOrders } from "@/lib/services/account";
+import { getMyConsultations } from "@/lib/services/consultations";
 import { signOutAction } from "../../(auth)/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,9 +30,10 @@ export default async function AccountPage() {
     redirect({ href: "/login", locale });
   }
 
-  const [{ data: profile }, orders] = await Promise.all([
+  const [{ data: profile }, orders, consultations] = await Promise.all([
     supabase.from("profiles").select("full_name, role, phone").eq("id", user!.id).single(),
     getMyOrders(),
+    getMyConsultations(),
   ]);
 
   return (
@@ -145,6 +147,49 @@ export default async function AccountPage() {
             </ul>
           )}
         </div>
+      </div>
+
+      {/* Consultations */}
+      <div className="mt-12">
+        <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
+          <CalendarClock className="size-5 text-nature" /> My Consultations
+        </h2>
+        {consultations.length === 0 ? (
+          <Card>
+            <CardContent className="py-8 text-center text-sm text-forest/60">
+              You have no consultations yet.{" "}
+              <a href="/consultation" className="font-semibold text-nature hover:underline">Book one →</a>
+            </CardContent>
+          </Card>
+        ) : (
+          <ul className="grid gap-4 md:grid-cols-2">
+            {consultations.map((c) => (
+              <Card key={c.id}>
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-2">
+                    {c.type === "video" ? <Video className="size-4 text-nature" /> : <Phone className="size-4 text-nature" />}
+                    <span className="font-semibold text-forest">
+                      {c.scheduled_at
+                        ? new Date(c.scheduled_at).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })
+                        : "Scheduled soon"}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-forest/60 capitalize">
+                    {c.type} · {c.duration_min} min · {c.status}
+                  </p>
+                  {c.meeting_link && (
+                    <a href={c.meeting_link} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-nature hover:underline">
+                      <Video className="size-4" /> Join video session
+                    </a>
+                  )}
+                  {c.type === "phone" && (
+                    <p className="mt-3 text-sm text-forest/70">We'll call you at the scheduled time.</p>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

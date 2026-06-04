@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe/server";
 import { createOrderFromSession } from "@/lib/services/orders";
+import { createConsultationFromSession } from "@/lib/services/consultations";
 
 // Stripe webhook — production-grade order creation. Verifies the signature
 // before trusting the payload. Configure STRIPE_WEBHOOK_SECRET from the Stripe
@@ -28,7 +29,12 @@ export async function POST(request: NextRequest) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
       if (session.payment_status === "paid") {
-        await createOrderFromSession(session);
+        // Route by metadata: consultations carry slot_id, product orders carry items.
+        if (session.metadata?.slot_id) {
+          await createConsultationFromSession(session);
+        } else {
+          await createOrderFromSession(session);
+        }
       }
     }
   } catch (e) {
