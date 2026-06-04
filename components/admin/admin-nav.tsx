@@ -1,7 +1,10 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/navigation";
-import { LayoutDashboard, Package, ClipboardList, Activity, Megaphone, CalendarClock } from "lucide-react";
+import {
+  LayoutDashboard, Package, ClipboardList, Activity, Megaphone, CalendarClock,
+  Newspaper, GraduationCap, Images, User,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
@@ -10,6 +13,10 @@ const ITEMS = [
   { href: "/admin/orders", label: "Orders", icon: ClipboardList },
   { href: "/admin/consultations", label: "Consultations", icon: CalendarClock },
   { href: "/admin/conditions", label: "Health Library", icon: Activity },
+  { href: "/admin/stories", label: "Stories", icon: Images },
+  { href: "/admin/blog", label: "Blog", icon: Newspaper },
+  { href: "/admin/webinars", label: "Classes", icon: GraduationCap },
+  { href: "/admin/about", label: "About", icon: User },
   { href: "/admin/social", label: "Social Drafts", icon: Megaphone },
 ];
 
