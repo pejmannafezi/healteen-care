@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --header-h: 4.5rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-heading text-forest;
+    text-wrap: balance;
+  }
+
+  /* RTL support for Farsi locale (brand guide: Vazirmatn) */
+  html[dir="rtl"] body {
+    @apply font-fa;
+  }
+
+  ::selection {
+    @apply bg-mint/30 text-forest;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply container mx-auto px-6;
+  }
+
+  /* Thin warm-gold divider — a brand design element */
+  .gold-divider {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-gold/50 to-transparent;
+  }
+
+  .eyebrow {
+    @apply font-accent italic text-nature text-sm tracking-wide;
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "brand": {
+    "name": "Healteen Care",
+    "subtitle": "Natural Healthcare & Herbal Wellness",
+    "tagline": "Care Today. Live Strong Tomorrow."
+  },
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "shopByType": "Shop by Product Type",
+    "shopByNeed": "Shop by Health Need",
+    "health": "Health Library",
+    "consultation": "Book a Consultation",
+    "about": "About",
+    "webinars": "Classes & Webinars",
+    "account": "My Account",
+    "login": "Log in",
+    "register": "Sign up",
+    "cart": "Cart"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Ancient herbal wisdom · modern science",
+      "title": "Natural support for pain relief, healthy aging & daily wellness",
+      "subtitle": "Lab-tested herbal products and personal consultations — so you can care for your body today, and it can care for you tomorrow.",
+      "ctaShop": "Explore Products",
+      "ctaConsult": "Book a Consultation"
+    },
+    "trust": {
+      "title": "Why customers trust Healteen Care",
+      "gmp": "GMP Supported",
+      "lab": "Lab-Tested",
+      "thirdParty": "Third-Party Tested",
+      "doctor": "Doctor-Approved"
+    },
+    "paths": {
+      "title": "Find what's right for you",
+      "byType": "Shop by Product Type",
+      "byTypeDesc": "Tablets, herbal teas, oils, creams, drops, supplements and wellness devices.",
+      "byNeed": "Shop by Health Need",
+      "byNeedDesc": "Pain relief, healthy aging, sleep, immunity, heart, brain and more."
+    },
+    "services": {
+      "title": "Personal Consultation",
+      "desc": "Book a private, paid session — by video or phone — for personalized natural-wellness guidance.",
+      "cta": "See availability"
+    },
+    "library": {
+      "title": "Health Library",
+      "desc": "Learn which herbal options may support common conditions, how to use them safely, and who should avoid them.",
+      "cta": "Browse the library"
+    },
+    "values": {
+      "title": "Our Core Values",
+      "wisdom": "Ancient Wisdom",
+      "wisdomDesc": "Herbal traditions backed by modern science.",
+      "aging": "Healthy Aging",
+      "agingDesc": "Helping adults 50–75 stay strong.",
+      "natural": "Natural Care",
+      "naturalDesc": "Pure herbal solutions, no harmful additives.",
+      "pain": "Pain Relief",
+      "painDesc": "Back, neck, joint & muscle pain support.",
+      "quality": "Trusted Quality",
+      "qualityDesc": "GMP, lab-tested & doctor-approved."
+    }
+  },
+  "footer": {
+    "tagline": "Care Today. Live Strong Tomorrow.",
+    "shop": "Shop",
+    "company": "Company",
+    "support": "Support",
+    "rights": "All rights reserved.",
+    "disclaimer": "These statements have not been evaluated by the FDA. Products are intended to support general wellness and are not intended to diagnose, treat, cure, or prevent any disease."
+  },
+  "common": {
+    "loading": "Loading…",
+    "comingSoon": "Coming soon"
+  }
+}
