@@ -75,27 +75,25 @@ function HomeContent() {
         </div>
       </section>
 
-      {/* ── Wellness Line featured band (warm honey) ── */}
-      <section className="bg-gradient-to-br from-honey via-honey to-honey-dark">
-        <div className="container-page grid items-center gap-10 py-16 md:grid-cols-2">
+      {/* ── Wellness Line featured band (photo background) ── */}
+      <section className="relative overflow-hidden bg-honey">
+        {/* Background photo (place the file at public/wellness-line.jpg) */}
+        <div className="absolute inset-0 bg-[url('/wellness-line.png')] bg-cover bg-center" />
+        {/* Readability overlay (left → dark, right → clear) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-forest/85 via-forest/55 to-forest/10" />
+        <div className="container-page relative grid items-center gap-10 py-24 md:grid-cols-2">
           <div>
-            <p className="font-accent text-lg italic text-forest/80">Featured collection</p>
-            <h2 className="mt-2 text-4xl font-bold text-forest md:text-5xl">The Wellness Line</h2>
-            <p className="mt-4 max-w-md text-forest/85">
+            <p className="font-accent text-lg italic text-mint">Featured collection</p>
+            <h2 className="mt-2 text-4xl font-bold text-cream md:text-5xl">The Wellness Line</h2>
+            <p className="mt-4 max-w-md text-cream/90">
               Our lab-tested herbal essentials — oils, drops, teas and supplements — crafted to
               help support pain relief, calm, and healthy aging.
             </p>
             <Link href="/shop" className="mt-7 inline-block">
-              <Button size="lg" variant="primary">
+              <Button size="lg" variant="gold">
                 Shop the collection <ArrowRight />
               </Button>
             </Link>
-          </div>
-          <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl bg-white/30 shadow-soft">
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center">
-              <Leaf className="size-16 text-forest/70" strokeWidth={1.2} />
-              <p className="font-heading text-2xl font-bold text-forest/80">Natural · Pure · Tested</p>
-            </div>
           </div>
         </div>
       </section>
