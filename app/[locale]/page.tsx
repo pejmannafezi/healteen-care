@@ -75,6 +75,31 @@ function HomeContent() {
         </div>
       </section>
 
+      {/* ── Wellness Line featured band (warm honey) ── */}
+      <section className="bg-gradient-to-br from-honey via-honey to-honey-dark">
+        <div className="container-page grid items-center gap-10 py-16 md:grid-cols-2">
+          <div>
+            <p className="font-accent text-lg italic text-forest/80">Featured collection</p>
+            <h2 className="mt-2 text-4xl font-bold text-forest md:text-5xl">The Wellness Line</h2>
+            <p className="mt-4 max-w-md text-forest/85">
+              Our lab-tested herbal essentials — oils, drops, teas and supplements — crafted to
+              help support pain relief, calm, and healthy aging.
+            </p>
+            <Link href="/shop" className="mt-7 inline-block">
+              <Button size="lg" variant="primary">
+                Shop the collection <ArrowRight />
+              </Button>
+            </Link>
+          </div>
+          <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl bg-white/30 shadow-soft">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center">
+              <Leaf className="size-16 text-forest/70" strokeWidth={1.2} />
+              <p className="font-heading text-2xl font-bold text-forest/80">Natural · Pure · Tested</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Two shopping paths (brand guide) ── */}
       <section className="container-page py-20">
         <h2 className="text-center text-3xl font-bold">{t("paths.title")}</h2>
@@ -127,6 +152,27 @@ function HomeContent() {
           <ValueCard title={t("values.natural")} desc={t("values.naturalDesc")} />
           <ValueCard title={t("values.pain")} desc={t("values.painDesc")} />
           <ValueCard title={t("values.quality")} desc={t("values.qualityDesc")} />
+        </div>
+      </section>
+
+      {/* ── Newsletter CTA (bright lime on dark) ── */}
+      <section className="bg-forest-700">
+        <div className="container-page py-16">
+          <div className="overflow-hidden rounded-3xl bg-lime px-8 py-12 md:px-14 md:py-16">
+            <p className="font-accent text-lg italic text-forest/70">Stay well, stay informed</p>
+            <h2 className="mt-2 max-w-2xl text-4xl font-bold leading-tight text-forest md:text-5xl">
+              Get the latest herbal wellness insights
+            </h2>
+            <p className="mt-4 max-w-xl text-forest/80">
+              Pain-relief tips, safe-use guides, seasonal wellness advice and new product launches —
+              straight to you.
+            </p>
+            <Link href="/register" className="mt-8 inline-block">
+              <Button size="lg" className="bg-forest text-lime hover:bg-forest-700">
+                Sign up now <ArrowRight />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </>

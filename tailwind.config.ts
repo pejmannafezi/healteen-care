@@ -27,6 +27,9 @@ const config: Config = {
         gold: { DEFAULT: "#C89B3C", 600: "#B98A2E" },
         terracotta: { DEFAULT: "#B85C38" },
         cream: { DEFAULT: "#F8F5EE" },
+        // New accent colors (from reference imagery)
+        lime: { DEFAULT: "#C4F84E", 600: "#AEE63B" },
+        honey: { DEFAULT: "#EBB84A", light: "#F8E7B6", dark: "#D9A22E" },
 
         // Semantic aliases (used by shadcn-style components)
         background: "#F8F5EE",
