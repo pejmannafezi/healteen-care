@@ -18,6 +18,7 @@ export default async function CategoryPage({
   const { category, products } = result;
 
   return (
+    <div className="bg-honey">
     <div className="container-page py-14">
       <Link href="/shop" className="text-sm text-nature hover:underline">
         ← Back to shop
@@ -36,6 +37,7 @@ export default async function CategoryPage({
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

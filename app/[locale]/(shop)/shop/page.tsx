@@ -21,9 +21,10 @@ export default async function ShopPage({
   ]);
 
   return (
+    <div className="bg-honey">
     <div className="container-page py-14">
       <header className="max-w-2xl">
-        <p className="eyebrow">Shop</p>
+        <p className="eyebrow text-forest/70">Shop</p>
         <h1 className="mt-2 text-4xl font-bold">Lab-tested herbal products</h1>
         <p className="mt-3 text-forest/70">
           Find what's right for you — browse by product type or by the health need you want
@@ -72,6 +73,7 @@ export default async function ShopPage({
           </div>
         )}
       </section>
+    </div>
     </div>
   );
 }

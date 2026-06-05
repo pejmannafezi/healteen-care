@@ -18,11 +18,12 @@ export default async function NeedPage({
   const { need, products } = result;
 
   return (
+    <div className="bg-honey">
     <div className="container-page py-14">
       <Link href="/shop" className="text-sm text-nature hover:underline">
         ← Back to shop
       </Link>
-      <p className="eyebrow mt-3">Shop by Health Need</p>
+      <p className="eyebrow mt-3 text-forest/70">Shop by Health Need</p>
       <h1 className="mt-1 text-4xl font-bold">{need.name}</h1>
       {need.description && <p className="mt-2 text-forest/70">{need.description}</p>}
 
@@ -37,6 +38,7 @@ export default async function NeedPage({
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

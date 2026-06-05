@@ -18,7 +18,7 @@ export function CardAddToCart({
 
   if (!inStock) {
     return (
-      <Button size="sm" variant="outline" disabled className="w-full">
+      <Button size="sm" disabled className="w-full border border-cream/30 bg-transparent text-cream/60">
         Out of stock
       </Button>
     );
@@ -27,7 +27,7 @@ export function CardAddToCart({
   return (
     <Button
       size="sm"
-      className="w-full"
+      className="w-full bg-lime text-forest hover:bg-lime-600"
       onClick={() => {
         add(item);
         setAdded(true);

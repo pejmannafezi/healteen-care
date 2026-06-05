@@ -13,10 +13,12 @@ export function TrustBadges({
   badges,
   size = "sm",
   className,
+  dark = false,
 }: {
   badges: TrustBadge[];
   size?: "sm" | "md";
   className?: string;
+  dark?: boolean;
 }) {
   if (!badges?.length) return null;
   return (
@@ -29,7 +31,8 @@ export function TrustBadges({
           <li
             key={b}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 font-medium text-forest",
+              "inline-flex items-center gap-1.5 rounded-full border font-medium",
+              dark ? "border-cream/20 bg-cream/10 text-cream" : "border-gold/40 bg-gold/10 text-forest",
               size === "sm" ? "px-2.5 py-1 text-xs" : "px-3 py-1.5 text-sm"
             )}
           >
