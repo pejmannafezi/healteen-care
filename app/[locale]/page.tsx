@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { setRequestLocale } from "next-intl/server";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -85,25 +86,30 @@ function HomeContent() {
         </div>
       </section>
 
-      {/* ── Wellness Line featured band (photo background) ── */}
-      <section className="relative overflow-hidden bg-honey">
-        {/* Background photo (place the file at public/wellness-line.jpg) */}
-        <div className="absolute inset-0 bg-[url('/wellness-line.png')] bg-cover bg-center" />
-        {/* Readability overlay (left → dark, right → clear) */}
-        <div className="absolute inset-0 bg-gradient-to-r from-forest/85 via-forest/55 to-forest/10" />
-        <div className="container-page relative grid items-center gap-10 py-24 md:grid-cols-2">
-          <div>
-            <p className="font-accent text-lg italic text-mint">Featured collection</p>
-            <h2 className="mt-2 text-4xl font-bold text-cream md:text-5xl">The Wellness Line</h2>
-            <p className="mt-4 max-w-md text-cream/90">
+      {/* ── Wellness Line featured band (warm HONEY panel + photo) ── */}
+      <section className="bg-honey">
+        <div className="container-page grid items-stretch gap-0 md:grid-cols-2">
+          <div className="flex flex-col justify-center py-16 md:pr-12">
+            <p className="font-accent text-lg italic text-forest/70">Featured collection</p>
+            <h2 className="mt-2 text-4xl font-bold text-forest md:text-5xl">The Wellness Line</h2>
+            <p className="mt-4 max-w-md text-forest/80">
               Our lab-tested herbal essentials — oils, drops, teas and supplements — crafted to
               help support pain relief, calm, and healthy aging.
             </p>
             <Link href="/shop" className="mt-7 inline-block">
-              <Button size="lg" variant="gold">
+              <Button size="lg" variant="primary">
                 Shop the collection <ArrowRight />
               </Button>
             </Link>
+          </div>
+          <div className="relative min-h-[280px] overflow-hidden rounded-2xl md:my-8 md:min-h-[420px]">
+            <Image
+              src="/wellness-line.png"
+              alt="Healteen Care wellness line"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
