@@ -1,6 +1,7 @@
-import { Package, Truck, CheckCircle2, AlertTriangle, MapPin } from "lucide-react";
+import { Package, Truck, CheckCircle2, AlertTriangle, MapPin, CalendarRange } from "lucide-react";
 import { getDeliveryReport } from "@/lib/services/admin";
 import { Card, CardContent } from "@/components/ui/card";
+import { PrintButton } from "@/components/admin/print-button";
 import { formatPrice } from "@/lib/utils";
 
 export const metadata = { title: "Deliveries" };
@@ -23,24 +24,69 @@ function formatAddress(addr: Addr): string {
     [addr.city, addr.state, addr.postal_code].filter(Boolean).join(", "),
     addr.country,
   ].filter(Boolean);
-  return parts.join(" · ");
+  return parts.join(" · ") || "No shipping address on file";
 }
 
 const fmtDate = (d: string | null | undefined) =>
   d ? new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "—";
 
-export default async function AdminDeliveriesPage() {
-  const r = await getDeliveryReport();
+export default async function AdminDeliveriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ from?: string }>;
+}) {
+  const sp = await searchParams;
+  const from = sp.from && /^\d{4}-\d{2}-\d{2}$/.test(sp.from) ? sp.from : undefined;
+  const fromISO = from ? new Date(`${from}T00:00:00`).toISOString() : undefined;
+  const r = await getDeliveryReport(fromISO);
+
+  const rangeLabel = from ? `${fmtDate(`${from}T00:00:00`)} → now` : "All time";
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-lg font-bold">Deliveries</h2>
-        <p className="text-sm text-forest/60">
-          Live fulfillment snapshot — stock left, what&apos;s in the post, what&apos;s
-          delivered, and everything still owed a delivery.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-bold">Deliveries</h2>
+          <p className="text-sm text-forest/60">
+            Live fulfillment snapshot — stock left, what&apos;s in the post, what&apos;s
+            delivered, and everyone still owed a delivery (name · date · address).
+          </p>
+        </div>
+        <PrintButton />
       </div>
+
+      {/* ── Date-range report filter (chosen date → now) ── */}
+      <Card className="print:hidden">
+        <CardContent className="p-4">
+          <form method="GET" className="flex flex-wrap items-end gap-3">
+            <label className="text-xs font-medium text-forest/70">
+              Report from date
+              <input
+                type="date"
+                name="from"
+                defaultValue={from ?? ""}
+                className="mt-1 block h-10 rounded-md border border-border bg-white px-3 text-sm"
+              />
+            </label>
+            <span className="mb-2.5 text-sm text-forest/60">→ now</span>
+            <button
+              type="submit"
+              className="inline-flex h-10 items-center gap-2 rounded-md bg-forest px-4 text-sm font-medium text-cream transition-colors hover:bg-forest-700"
+            >
+              <CalendarRange className="size-4" /> Get report
+            </button>
+            {from && (
+              <a href="?" className="mb-2.5 text-sm text-nature hover:underline">Clear</a>
+            )}
+          </form>
+        </CardContent>
+      </Card>
+
+      <p className="flex items-center gap-2 text-sm text-forest/70">
+        <CalendarRange className="size-4 text-nature" />
+        Showing orders for: <span className="font-semibold text-forest">{rangeLabel}</span>
+        <span className="text-forest/40">({r.totalOrders} order{r.totalOrders === 1 ? "" : "s"})</span>
+      </p>
 
       {/* ── Stat row ── */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -50,7 +96,7 @@ export default async function AdminDeliveriesPage() {
         <Stat icon={<MapPin />} label="Not delivered yet" value={String(r.notDelivered.length)} />
       </div>
 
-      {/* ── Products left ── */}
+      {/* ── Products left (always current, not date-filtered) ── */}
       <Section title="Product stock left" count={r.products.length}>
         {r.products.length === 0 ? (
           <Empty>No products yet.</Empty>
@@ -80,7 +126,7 @@ export default async function AdminDeliveriesPage() {
       {/* ── In post / out for delivery ── */}
       <Section title="In post — out for delivery" count={r.inPost.length}>
         {r.inPost.length === 0 ? (
-          <Empty>Nothing in transit right now.</Empty>
+          <Empty>Nothing in transit in this range.</Empty>
         ) : (
           <ul className="divide-y divide-border">
             {r.inPost.map((o) => {
@@ -96,6 +142,10 @@ export default async function AdminDeliveriesPage() {
                     {o.tracking_carrier ?? "Carrier ?"} · {o.tracking_number ?? "no tracking #"}
                     {o.tracking_status ? ` · ${o.tracking_status}` : ""}
                   </p>
+                  <p className="flex items-start gap-1 text-xs text-forest/55">
+                    <MapPin className="mt-0.5 size-3 shrink-0" />
+                    <span>{formatAddress(addr)}</span>
+                  </p>
                 </li>
               );
             })}
@@ -106,17 +156,17 @@ export default async function AdminDeliveriesPage() {
       {/* ── Delivered (with date) ── */}
       <Section title="Delivered" count={r.delivered.length}>
         {r.delivered.length === 0 ? (
-          <Empty>No deliveries completed yet.</Empty>
+          <Empty>No deliveries completed in this range.</Empty>
         ) : (
           <ul className="divide-y divide-border">
             {r.delivered.map((o) => {
               const addr = o.shipping_address as Addr;
               return (
-                <li key={o.id} className="flex items-center justify-between gap-4 p-4 text-sm">
+                <li key={o.id} className="flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
                   <span className="font-mono text-xs text-forest/50">#{o.id.slice(0, 8).toUpperCase()}</span>
-                  <span className="flex-1 truncate text-forest/85">{addr?.name ?? o.email}</span>
+                  <span className="min-w-[8rem] flex-1 truncate text-forest/85">{addr?.name ?? o.email}</span>
                   <span className="flex items-center gap-1 text-xs text-nature">
-                    <CheckCircle2 className="size-3" /> {fmtDate(o.delivered_at)}
+                    <CheckCircle2 className="size-3" /> Delivered {fmtDate(o.updated_at)}
                   </span>
                   <span className="w-20 text-right font-semibold text-forest">
                     {formatPrice(o.total_cents / 100, o.currency)}
@@ -128,21 +178,22 @@ export default async function AdminDeliveriesPage() {
         )}
       </Section>
 
-      {/* ── Not delivered — name & address (all) ── */}
-      <Section title="Not delivered — name & address" count={r.notDelivered.length}>
+      {/* ── Not delivered — name · date · address (all of them) ── */}
+      <Section title="Not delivered — name · date · address" count={r.notDelivered.length}>
         {r.notDelivered.length === 0 ? (
-          <Empty>Everything has been delivered. 🎉</Empty>
+          <Empty>Everything in this range has been delivered. 🎉</Empty>
         ) : (
           <ul className="divide-y divide-border">
             {r.notDelivered.map((o) => {
               const addr = o.shipping_address as Addr;
               return (
                 <li key={o.id} className="space-y-1 p-4 text-sm">
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-mono text-xs text-forest/50">#{o.id.slice(0, 8).toUpperCase()}</span>
                     <span className="flex-1 truncate font-medium text-forest/85">
                       {addr?.name ?? "—"} <span className="text-forest/50">· {o.email}</span>
                     </span>
+                    <span className="text-xs text-forest/60">Ordered {fmtDate(o.created_at)}</span>
                     <span className="rounded-full bg-gold/15 px-2 py-0.5 text-xs text-gold-600">
                       {STATUS_LABEL[o.status] ?? o.status}
                     </span>

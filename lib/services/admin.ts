@@ -35,19 +35,24 @@ export async function getAdminOverview() {
 
 // Deterministic fulfillment report for the admin Deliveries page.
 // Exact counts straight from the DB (no LLM) behind requireAdmin.
-export async function getDeliveryReport() {
+// `fromISO` (optional) limits orders to that date → now; stock is always current.
+export async function getDeliveryReport(fromISO?: string | null) {
   const db = createSupabaseAdminClient();
+
+  let ordersQuery = db
+    .from("orders")
+    .select(
+      "id, email, status, total_cents, currency, created_at, updated_at, tracking_number, tracking_carrier, tracking_status, tracking_url, eta, shipping_address"
+    )
+    .order("created_at", { ascending: false });
+  if (fromISO) ordersQuery = ordersQuery.gte("created_at", fromISO);
+
   const [products, orders] = await Promise.all([
     db
       .from("products")
       .select("id, name, stock_qty, low_stock_threshold, is_active")
       .order("stock_qty", { ascending: true }),
-    db
-      .from("orders")
-      .select(
-        "id, email, status, total_cents, currency, created_at, delivered_at, tracking_number, tracking_carrier, tracking_status, tracking_url, eta, shipping_address"
-      )
-      .order("created_at", { ascending: false }),
+    ordersQuery,
   ]);
 
   const prod = products.data ?? [];
