@@ -3,7 +3,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { StoriesBar } from "@/components/site/stories-bar";
-import { getStories } from "@/lib/services/content";
+import { getStories, getActiveOrNextLive } from "@/lib/services/content";
+import { LiveBanner } from "@/components/live/live-banner";
 import {
   ShieldCheck,
   FlaskConical,
@@ -22,9 +23,10 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const stories = await getStories();
+  const [stories, live] = await Promise.all([getStories(), getActiveOrNextLive()]);
   return (
     <>
+      {live?.status === "live" && <LiveBanner title={live.title} />}
       <StoriesBar stories={stories} />
       <HomeContent />
     </>

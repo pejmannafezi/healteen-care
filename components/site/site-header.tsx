@@ -17,6 +17,7 @@ export function SiteHeader({ user }: { user: HeaderUser }) {
   const links = [
     { href: "/shop", label: t("shop") },
     { href: "/health", label: t("health") },
+    { href: "/live", label: t("live") },
     { href: "/consultation", label: t("consultation") },
     { href: "/about", label: t("about") },
     { href: "/webinars", label: t("webinars") },
