@@ -33,6 +33,47 @@ export async function getAdminOverview() {
   };
 }
 
+// Deterministic fulfillment report for the admin Deliveries page.
+// Exact counts straight from the DB (no LLM) behind requireAdmin.
+export async function getDeliveryReport() {
+  const db = createSupabaseAdminClient();
+  const [products, orders] = await Promise.all([
+    db
+      .from("products")
+      .select("id, name, stock_qty, low_stock_threshold, is_active")
+      .order("stock_qty", { ascending: true }),
+    db
+      .from("orders")
+      .select(
+        "id, email, status, total_cents, currency, created_at, delivered_at, tracking_number, tracking_carrier, tracking_status, tracking_url, eta, shipping_address"
+      )
+      .order("created_at", { ascending: false }),
+  ]);
+
+  const prod = products.data ?? [];
+  const ord = orders.data ?? [];
+
+  const totalStock = prod.reduce((n, p) => n + (p.stock_qty ?? 0), 0);
+  const lowStock = prod.filter((p) => p.stock_qty <= p.low_stock_threshold);
+
+  // "In post / out for delivery" = handed to the carrier, in transit.
+  const inPost = ord.filter((o) => o.status === "shipped");
+  // Delivered (with date).
+  const delivered = ord.filter((o) => o.status === "delivered");
+  // "Not delivered" = every order that isn't delivered yet (all of them).
+  const notDelivered = ord.filter((o) => o.status !== "delivered");
+
+  return {
+    products: prod,
+    totalStock,
+    lowStock,
+    inPost,
+    delivered,
+    notDelivered,
+    totalOrders: ord.length,
+  };
+}
+
 export async function adminListProducts() {
   const db = createSupabaseAdminClient();
   const { data } = await db

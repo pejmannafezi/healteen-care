@@ -9,10 +9,13 @@
 
   html {
     scroll-behavior: smooth;
+    background-color: #f8f5ee;
   }
 
+  /* Body is transparent so the fixed site-wide background image (in the
+     locale layout) shows through wherever a section isn't opaque. */
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply text-foreground font-sans antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 

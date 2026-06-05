@@ -41,6 +41,19 @@ export async function updateOrder(formData: FormData) {
     void registerTracking(tracking_carrier, tracking_number);
   }
 
+  // Stamp / clear the delivery date based on the final resolved status.
+  if (update.status === "delivered") {
+    const { data: existing } = await db
+      .from("orders")
+      .select("delivered_at")
+      .eq("id", id)
+      .single();
+    // Preserve the first delivery time if already set.
+    if (!existing?.delivered_at) update.delivered_at = new Date().toISOString();
+  } else if (typeof update.status === "string") {
+    update.delivered_at = null;
+  }
+
   await db.from("orders").update(update).eq("id", id);
   revalidatePath("/admin/orders");
   revalidatePath("/account");

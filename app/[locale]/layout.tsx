@@ -44,6 +44,9 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning className={fontVariables}>
       <body className="min-h-dvh flex flex-col">
+        {/* Site-wide fixed background image + cream veil for readability */}
+        <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-[url('/wellness-line.png')] bg-cover bg-center bg-no-repeat" />
+        <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-cream/65" />
         <NextIntlClientProvider messages={messages}>
           <SiteHeader user={headerUser} />
           <main className="flex-1">{children}</main>

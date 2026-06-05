@@ -21,17 +21,24 @@ export default async function ShopPage({
   ]);
 
   return (
-    <div className="bg-honey">
-    <div className="container-page py-14">
-      <header className="max-w-2xl">
-        <p className="eyebrow text-forest/70">Shop</p>
-        <h1 className="mt-2 text-4xl font-bold">Lab-tested herbal products</h1>
-        <p className="mt-3 text-forest/70">
-          Find what's right for you — browse by product type or by the health need you want
-          to support.
-        </p>
-      </header>
+    <div className="bg-honey/60">
+    {/* Bold lime hero (KODIAK-style) */}
+    <div className="bg-lime">
+      <div className="container-page py-16">
+        <header className="max-w-3xl">
+          <p className="eyebrow text-black/60">Shop</p>
+          <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-black sm:text-5xl">
+            Lab-tested herbal products
+          </h1>
+          <p className="mt-4 text-lg text-black/80">
+            Find what's right for you — browse by product type or by the health need you want
+            to support.
+          </p>
+        </header>
+      </div>
+    </div>
 
+    <div className="container-page py-14">
       {/* Shop by Product Type */}
       <section className="mt-12">
         <div className="mb-5 flex items-center gap-2">
@@ -82,7 +89,7 @@ function TaxonomyChip({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="rounded-xl border border-border bg-card px-4 py-3 text-center text-sm font-medium text-forest shadow-card transition-all hover:border-nature/40 hover:bg-nature/5"
+      className="rounded-xl border border-black/10 bg-lime px-4 py-3 text-center text-sm font-bold text-black shadow-card transition-all hover:bg-lime-600"
     >
       {label}
     </Link>

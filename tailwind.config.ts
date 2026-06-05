@@ -29,7 +29,7 @@ const config: Config = {
         cream: { DEFAULT: "#F8F5EE" },
         // New accent colors (from reference imagery)
         lime: { DEFAULT: "#C4F84E", 600: "#AEE63B" },
-        honey: { DEFAULT: "#EBB84A", light: "#F8E7B6", dark: "#D9A22E" },
+        honey: { DEFAULT: "#FFC107", light: "#F8E7B6", dark: "#D9A22E" },
 
         // Semantic aliases (used by shadcn-style components)
         background: "#F8F5EE",

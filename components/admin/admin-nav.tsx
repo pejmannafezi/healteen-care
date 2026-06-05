@@ -3,7 +3,7 @@
 import { Link, usePathname } from "@/i18n/navigation";
 import {
   LayoutDashboard, Package, ClipboardList, Activity, Megaphone, CalendarClock,
-  Newspaper, GraduationCap, Images, User, Radio,
+  Newspaper, GraduationCap, Images, User, Radio, Truck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +11,7 @@ const ITEMS = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/orders", label: "Orders", icon: ClipboardList },
+  { href: "/admin/deliveries", label: "Deliveries", icon: Truck },
   { href: "/admin/consultations", label: "Consultations", icon: CalendarClock },
   { href: "/admin/live", label: "Live Studio", icon: Radio },
   { href: "/admin/conditions", label: "Health Library", icon: Activity },
