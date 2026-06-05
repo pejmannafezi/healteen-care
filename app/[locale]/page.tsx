@@ -182,8 +182,8 @@ function HomeContent() {
               straight to you.
             </p>
             <Link href="/register" className="mt-8 inline-block">
-              <Button size="lg" className="bg-forest text-lime hover:bg-forest-700">
-                Sign up now <ArrowRight />
+              <Button size="lg" className="rounded-md bg-[#101010] px-10 font-bold uppercase tracking-wide text-white hover:bg-black">
+                Sign up now
               </Button>
             </Link>
           </div>
