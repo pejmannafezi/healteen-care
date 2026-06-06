@@ -1,0 +1,2 @@
+# The mobile (Expo) app is a separate project; Vercel only builds the website.
+mobile
