@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GoogleButton } from "@/components/auth/google-button";
 
 export default function LoginPage() {
   const t = useTranslations("nav");
@@ -51,6 +52,13 @@ export default function LoginPage() {
               Forgot password?
             </Link>
           </p>
+
+          <div className="my-5 flex items-center gap-3">
+            <span className="h-px flex-1 bg-border" />
+            <span className="text-xs uppercase tracking-wide text-forest/40">or</span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <GoogleButton />
 
           <p className="mt-5 text-center text-sm text-forest/70">
             New here?{" "}
