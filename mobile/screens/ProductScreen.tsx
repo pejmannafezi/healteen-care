@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ScrollView, View, Text, Image, ActivityIndicator, StyleSheet, Pressable } from "react-native";
 import { fetchProduct, type Product } from "../lib/catalog";
 import { formatPrice } from "../lib/format";
-import { colors } from "../lib/theme";
+import { colors, fonts } from "../lib/theme";
 
 export function ProductScreen({ id, onBack }: { id: string; onBack: () => void }) {
   const [product, setProduct] = useState<Product | null>(null);
@@ -73,12 +73,12 @@ function Section({ title, text }: { title: string; text: string | null }) {
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center", padding: 24 },
   back: { paddingHorizontal: 16, paddingVertical: 12 },
-  backText: { color: colors.nature, fontWeight: "700", fontSize: 15 },
+  backText: { color: colors.nature, fontFamily: fonts.bodyBold, fontSize: 15 },
   hero: { width: "100%", height: 280, backgroundColor: colors.cream },
   body: { padding: 16 },
-  name: { fontSize: 24, fontWeight: "800", color: colors.text },
-  price: { fontSize: 20, fontWeight: "800", color: colors.forest, marginTop: 6 },
-  size: { fontSize: 13, color: colors.muted, marginTop: 2 },
-  para: { fontSize: 15, lineHeight: 22, color: colors.text, marginTop: 8 },
-  h2: { fontSize: 16, fontWeight: "800", color: colors.forest },
+  name: { fontSize: 26, fontFamily: fonts.heading, color: colors.forest, lineHeight: 32 },
+  price: { fontSize: 20, fontFamily: fonts.bodyBold, color: colors.forest, marginTop: 6 },
+  size: { fontSize: 13, fontFamily: fonts.body, color: colors.muted, marginTop: 2 },
+  para: { fontSize: 15, lineHeight: 22, fontFamily: fonts.body, color: colors.text, marginTop: 8 },
+  h2: { fontSize: 17, fontFamily: fonts.headingSemi, color: colors.forest },
 });

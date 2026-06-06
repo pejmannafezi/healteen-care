@@ -1,5 +1,5 @@
 import { Pressable, Text, ActivityIndicator, StyleSheet } from "react-native";
-import { colors } from "../lib/theme";
+import { colors, fonts } from "../lib/theme";
 
 export function Button({
   title,
@@ -44,5 +44,5 @@ const styles = StyleSheet.create({
   },
   primary: { backgroundColor: colors.forest },
   outline: { borderWidth: 1.5, borderColor: colors.forest, backgroundColor: "transparent" },
-  text: { fontSize: 16, fontWeight: "700" },
+  text: { fontSize: 16, fontFamily: fonts.bodyBold },
 });

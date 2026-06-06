@@ -2,10 +2,10 @@ import { useState } from "react";
 import { View, Text, TextInput, StyleSheet, Alert, Pressable, KeyboardAvoidingView, Platform } from "react-native";
 import { useAuth } from "../lib/auth";
 import { Button } from "../components/Button";
-import { colors } from "../lib/theme";
+import { colors, fonts } from "../lib/theme";
 
 export function AccountScreen() {
-  const { user, signIn, signUp, signOut } = useAuth();
+  const { user, signIn, signUp, resetPassword, signOut } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -39,6 +39,18 @@ export function AccountScreen() {
     }
   };
 
+  const forgot = async () => {
+    if (!email) {
+      Alert.alert("Enter your email", "Type your email above first, then tap “Forgot password”.");
+      return;
+    }
+    setBusy(true);
+    const { error } = await resetPassword(email.trim());
+    setBusy(false);
+    if (error) Alert.alert("Error", error);
+    else Alert.alert("Check your email", "We sent you a link to reset your password.");
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.wrap}
@@ -66,7 +78,14 @@ export function AccountScreen() {
         onChangeText={setPassword}
       />
       <Button title={mode === "login" ? "Log in" : "Sign up"} loading={busy} onPress={submit} />
-      <Pressable onPress={() => setMode(mode === "login" ? "signup" : "login")} style={{ marginTop: 18 }}>
+
+      {mode === "login" && (
+        <Pressable onPress={forgot} style={{ marginTop: 14 }}>
+          <Text style={styles.forgot}>Forgot password?</Text>
+        </Pressable>
+      )}
+
+      <Pressable onPress={() => setMode(mode === "login" ? "signup" : "login")} style={{ marginTop: 16 }}>
         <Text style={styles.switch}>
           {mode === "login" ? "New here? Create an account" : "Already have an account? Log in"}
         </Text>
@@ -77,9 +96,9 @@ export function AccountScreen() {
 
 const styles = StyleSheet.create({
   wrap: { flex: 1, padding: 24, justifyContent: "center" },
-  title: { fontSize: 26, fontWeight: "800", color: colors.text },
-  muted: { fontSize: 14, color: colors.muted, marginTop: 4 },
-  email: { fontSize: 18, fontWeight: "700", color: colors.forest, marginTop: 4 },
+  title: { fontSize: 28, fontFamily: fonts.heading, color: colors.forest },
+  muted: { fontSize: 14, fontFamily: fonts.body, color: colors.muted, marginTop: 4 },
+  email: { fontSize: 18, fontFamily: fonts.bodyBold, color: colors.forest, marginTop: 4 },
   input: {
     height: 52,
     borderWidth: 1,
@@ -88,8 +107,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     fontSize: 16,
     color: colors.text,
+    fontFamily: fonts.body,
     backgroundColor: colors.white,
     marginBottom: 12,
   },
-  switch: { color: colors.nature, fontWeight: "600", textAlign: "center", fontSize: 14 },
+  forgot: { color: colors.nature, fontFamily: fonts.bodySemi, textAlign: "center", fontSize: 14 },
+  switch: { color: colors.nature, fontFamily: fonts.bodySemi, textAlign: "center", fontSize: 14 },
 });

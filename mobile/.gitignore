@@ -33,6 +33,9 @@ yarn-error.*
 # local env files
 .env*.local
 
+# local dev helper (contains LAN IP)
+open-on-phone.html
+
 # typescript
 *.tsbuildinfo
 

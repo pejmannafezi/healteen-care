@@ -9,11 +9,15 @@ export async function GET(request: NextRequest) {
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
 
+  const next = searchParams.get("next");
+
   if (token_hash && type) {
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.verifyOtp({ type, token_hash });
     if (!error) {
-      return NextResponse.redirect(`${origin}/account`);
+      // Password-recovery links must land on the "set a new password" page.
+      if (type === "recovery") return NextResponse.redirect(`${origin}/reset-password`);
+      return NextResponse.redirect(`${origin}${next ?? "/account"}`);
     }
   }
 

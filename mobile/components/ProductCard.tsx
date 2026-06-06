@@ -1,5 +1,5 @@
 import { Pressable, View, Text, Image, StyleSheet } from "react-native";
-import { colors } from "../lib/theme";
+import { colors, fonts } from "../lib/theme";
 import { formatPrice } from "../lib/format";
 import type { ProductCard as ProductCardType } from "../lib/catalog";
 
@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
   img: { width: "100%", height: "100%" },
   placeholder: { alignItems: "center", justifyContent: "center" },
   body: { flex: 1, padding: 12, justifyContent: "space-between" },
-  name: { fontSize: 15, fontWeight: "700", color: colors.text },
-  desc: { fontSize: 12, color: colors.muted, marginTop: 2 },
+  name: { fontSize: 16, fontFamily: fonts.headingSemi, color: colors.forest },
+  desc: { fontSize: 12, fontFamily: fonts.body, color: colors.muted, marginTop: 2 },
   row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 8 },
-  price: { fontSize: 16, fontWeight: "800", color: colors.forest },
-  stock: { fontSize: 11, fontWeight: "600" },
+  price: { fontSize: 16, fontFamily: fonts.bodyBold, color: colors.forest },
+  stock: { fontSize: 11, fontFamily: fonts.bodySemi },
 });

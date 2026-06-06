@@ -1,3 +1,12 @@
+// Brand fonts — mirrors the website (Playfair Display headings, Open Sans body).
+export const fonts = {
+  heading: "PlayfairDisplay_700Bold",
+  headingSemi: "PlayfairDisplay_600SemiBold",
+  body: "OpenSans_400Regular",
+  bodySemi: "OpenSans_600SemiBold",
+  bodyBold: "OpenSans_700Bold",
+};
+
 // Brand palette — mirrors the website (Healteen Care brand guide).
 export const colors = {
   forest: "#1A4D3A",

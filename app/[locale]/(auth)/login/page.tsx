@@ -46,6 +46,12 @@ export default function LoginPage() {
             </Button>
           </form>
 
+          <p className="mt-3 text-center text-sm">
+            <Link href="/forgot-password" className="text-nature hover:underline">
+              Forgot password?
+            </Link>
+          </p>
+
           <p className="mt-5 text-center text-sm text-forest/70">
             New here?{" "}
             <Link href="/register" className="font-semibold text-nature hover:underline">
