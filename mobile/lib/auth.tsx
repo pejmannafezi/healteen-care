@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
 import { supabase } from "./supabase";
+
+WebBrowser.maybeCompleteAuthSession();
 
 type AuthResult = { error?: string };
 
@@ -9,6 +13,7 @@ type AuthContextValue = {
   loading: boolean;
   signIn: (email: string, password: string) => Promise<AuthResult>;
   signUp: (email: string, password: string) => Promise<AuthResult>;
+  signInWithGoogle: () => Promise<AuthResult>;
   resetPassword: (email: string) => Promise<AuthResult>;
   signOut: () => Promise<void>;
 };
@@ -49,6 +54,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error: error?.message };
   };
 
+  const signInWithGoogle = async (): Promise<AuthResult> => {
+    const redirectTo = Linking.createURL("auth-callback");
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo, skipBrowserRedirect: true },
+    });
+    if (error) return { error: error.message };
+    if (!data?.url) return { error: "Could not start Google sign-in." };
+
+    const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
+    if (result.type === "success" && result.url) {
+      const { queryParams } = Linking.parse(result.url);
+      const code = queryParams?.code as string | undefined;
+      if (code) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        return { error: exchangeError?.message };
+      }
+      return { error: "Google sign-in returned no code." };
+    }
+    // User closed the browser — treat as a silent cancel.
+    if (result.type === "cancel" || result.type === "dismiss") return {};
+    return { error: "Google sign-in did not complete." };
+  };
+
   const resetPassword = async (email: string): Promise<AuthResult> => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${SITE_URL}/reset-password`,
@@ -61,7 +90,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, resetPassword, signOut }}>
+    <AuthContext.Provider
+      value={{ user, loading, signIn, signUp, signInWithGoogle, resetPassword, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

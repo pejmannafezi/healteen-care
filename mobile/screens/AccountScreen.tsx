@@ -5,11 +5,12 @@ import { Button } from "../components/Button";
 import { colors, fonts } from "../lib/theme";
 
 export function AccountScreen() {
-  const { user, signIn, signUp, resetPassword, signOut } = useAuth();
+  const { user, signIn, signUp, signInWithGoogle, resetPassword, signOut } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [busy, setBusy] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
 
   if (user) {
     return (
@@ -37,6 +38,13 @@ export function AccountScreen() {
     } else if (mode === "signup") {
       Alert.alert("Almost there", "Check your email to confirm your account, then log in.");
     }
+  };
+
+  const google = async () => {
+    setGoogleBusy(true);
+    const { error } = await signInWithGoogle();
+    setGoogleBusy(false);
+    if (error) Alert.alert("Google sign-in", error);
   };
 
   const forgot = async () => {
@@ -79,6 +87,18 @@ export function AccountScreen() {
       />
       <Button title={mode === "login" ? "Log in" : "Sign up"} loading={busy} onPress={submit} />
 
+      <View style={styles.orRow}>
+        <View style={styles.orLine} />
+        <Text style={styles.orText}>or</Text>
+        <View style={styles.orLine} />
+      </View>
+      <Button
+        title="Continue with Google"
+        variant="outline"
+        loading={googleBusy}
+        onPress={google}
+      />
+
       {mode === "login" && (
         <Pressable onPress={forgot} style={{ marginTop: 14 }}>
           <Text style={styles.forgot}>Forgot password?</Text>
@@ -111,6 +131,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     marginBottom: 12,
   },
+  orRow: { flexDirection: "row", alignItems: "center", gap: 10, marginVertical: 16 },
+  orLine: { flex: 1, height: 1, backgroundColor: colors.border },
+  orText: { fontSize: 12, fontFamily: fonts.bodySemi, color: colors.muted, textTransform: "uppercase" },
   forgot: { color: colors.nature, fontFamily: fonts.bodySemi, textAlign: "center", fontSize: 14 },
   switch: { color: colors.nature, fontFamily: fonts.bodySemi, textAlign: "center", fontSize: 14 },
 });
