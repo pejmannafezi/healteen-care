@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { ScrollView, View, Text, Image, ActivityIndicator, StyleSheet, Pressable } from "react-native";
 import { fetchProduct, type Product } from "../lib/catalog";
 import { formatPrice } from "../lib/format";
+import { useCart } from "../lib/cart";
+import { Button } from "../components/Button";
 import { colors, fonts } from "../lib/theme";
 
 export function ProductScreen({ id, onBack }: { id: string; onBack: () => void }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [added, setAdded] = useState(false);
+  const { add } = useCart();
 
   useEffect(() => {
     let active = true;
@@ -50,6 +54,24 @@ export function ProductScreen({ id, onBack }: { id: string; onBack: () => void }
         <Text style={styles.price}>{formatPrice(product.price_cents, product.currency)}</Text>
         {product.size ? <Text style={styles.size}>{product.size}</Text> : null}
         {product.short_description ? <Text style={styles.para}>{product.short_description}</Text> : null}
+
+        <View style={{ marginTop: 16 }}>
+          <Button
+            title={added ? "Added to cart ✓" : "Add to cart"}
+            onPress={() => {
+              add({
+                productId: product.id,
+                slug: product.slug,
+                name: product.name,
+                priceCents: product.price_cents,
+                currency: product.currency,
+                image: product.images?.[0],
+              });
+              setAdded(true);
+              setTimeout(() => setAdded(false), 1500);
+            }}
+          />
+        </View>
 
         <Section title="Benefits" text={product.benefits} />
         <Section title="How to use" text={product.how_to_use} />

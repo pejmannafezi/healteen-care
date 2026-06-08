@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ronica's friends — Original Dirty Soda</title>
+  <meta name="description" content="Ronica's friends — original dirty sodas, refreshers, and treats. Soda meets flavor. Order now." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 1. Announcement bar -->
+  <div class="announce">
+    <span>🐉 Dragon Fruit Summer is back — our biggest menu of the year. <a href="#sips">Order now</a></span>
+  </div>
+
+  <!-- 2. Header / nav -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="wordmark" aria-label="Ronica's friends home">
+        <span class="wordmark-script">Ronica's</span>
+        <span class="wordmark-sub">friends</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+        <a href="menu.html">Menu</a>
+        <a href="#locations">Locations</a>
+        <a href="#club">Club</a>
+        <a href="#about">About</a>
+        <a href="menu.html" class="btn btn-red nav-cta">Order Now</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- 3. Hero -->
+    <section class="hero" aria-label="Original Dirty Soda">
+      <div class="hero-overlay"></div>
+      <div class="container hero-inner">
+        <p class="hero-kicker">Soda Meets Flavor</p>
+        <h1 class="hero-title">Original<br />Dirty Soda</h1>
+        <p class="hero-lede">Crafted sodas swirled with cream, purées &amp; pure good vibes — made fresh by Ronica's friends.</p>
+        <a href="menu.html" class="btn btn-cream hero-cta">Order Now</a>
+      </div>
+    </section>
+
+    <!-- 4. Good Neighbors Club banner -->
+    <section class="club" id="club" aria-label="Good Neighbors Club">
+      <div class="club-stripes" aria-hidden="true"></div>
+      <div class="container">
+        <div class="club-card">
+          <div class="club-stars" aria-hidden="true">★ ★ ★</div>
+          <h2 class="club-title">Good<br />Neighbors</h2>
+          <div class="club-badge">CLUB</div>
+          <p class="club-text">Earn sips, unlock perks, and get treated like family. It's free to join the friendliest rewards club around.</p>
+          <a href="#signup" class="btn btn-blue">Shop Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Signature Sips -->
+    <section class="sips" id="sips" aria-labelledby="sips-heading">
+      <div class="container">
+        <h2 id="sips-heading" class="section-title">Signature Sips</h2>
+        <p class="section-intro">Explore our fan-favorite drinks and treats, crafted with care and loved by millions.</p>
+
+        <div class="tabs" role="tablist" aria-label="Drink categories">
+          <button class="tab" role="tab" id="tab-summer" aria-controls="panel-summer" aria-selected="true">Summer Menu</button>
+          <button class="tab" role="tab" id="tab-dirty" aria-controls="panel-dirty" aria-selected="false">Dirty Sodas</button>
+          <button class="tab" role="tab" id="tab-refreshers" aria-controls="panel-refreshers" aria-selected="false">Refreshers</button>
+          <button class="tab" role="tab" id="tab-reviews" aria-controls="panel-reviews" aria-selected="false">Reviews</button>
+          <button class="tab" role="tab" id="tab-treats" aria-controls="panel-treats" aria-selected="false">Sweets &amp; Treats</button>
+        </div>
+
+        <p class="sips-blurb" id="sips-blurb">Dragon Fruit Summer is back. Our biggest menu of the year.</p>
+
+        <div class="sips-grid" id="sips-grid" role="tabpanel" aria-labelledby="tab-summer">
+          <!-- cards injected by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Text signup -->
+    <section class="signup" id="signup" aria-labelledby="signup-heading">
+      <div class="signup-wave" aria-hidden="true"></div>
+      <div class="container signup-inner">
+        <div class="signup-copy">
+          <h2 id="signup-heading">Sign up for Ronica's Unlocked Texts</h2>
+          <p>For insider access &amp; exclusive offers. Often a sip ahead of everyone else.</p>
+        </div>
+        <form class="signup-form" id="signup-form" novalidate>
+          <label class="sr-only" for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="Enter your phone number" required />
+          <label class="sr-only" for="email">Email address</label>
+          <input id="email" name="email" type="email" placeholder="Optional email address" />
+          <p class="signup-fine">By joining you agree to receive recurring automated marketing texts. Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.</p>
+          <button type="submit" class="btn btn-red signup-btn">Subscribe</button>
+          <p class="signup-thanks" id="signup-thanks" hidden role="status">🎉 You're in! Watch your texts for your first unlock.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- 7. Social feed -->
+    <section class="social" aria-labelledby="social-heading">
+      <div class="container">
+        <p class="social-eyebrow">Dirty. Delicious. Viral.</p>
+        <h2 id="social-heading">As Seen on <span class="hashtag">#ronicasfriends</span></h2>
+        <p class="social-sub">Follow us on TikTok</p>
+        <div class="social-grid">
+          <article class="social-tile tile-a"><button class="play" aria-label="Play video">▶</button></article>
+          <article class="social-tile tile-b"><button class="play" aria-label="Play video">▶</button></article>
+          <article class="social-tile tile-c"><button class="play" aria-label="Play video">▶</button></article>
+          <article class="social-tile tile-d"><button class="play" aria-label="Play video">▶</button></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 8. Footer -->
+  <footer class="site-footer" id="about">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="wordmark-script">Ronica's</span>
+        <span class="wordmark-sub">friends</span>
+        <p class="footer-tag">Soda meets flavor.</p>
+      </div>
+      <nav class="footer-col" aria-label="Menu">
+        <h3>Menu</h3>
+        <a href="menu.html#dirty">Dirty Sodas</a>
+        <a href="menu.html#refreshers">Refreshers</a>
+        <a href="menu.html#treats">Sweets &amp; Treats</a>
+        <a href="menu.html#summer">Summer Specials</a>
+      </nav>
+      <nav class="footer-col" aria-label="Company">
+        <h3>Company</h3>
+        <a href="#about">Our Story</a>
+        <a href="#locations">Locations</a>
+        <a href="#club">Good Neighbors Club</a>
+        <a href="#about">Franchising</a>
+      </nav>
+      <nav class="footer-col" aria-label="Support">
+        <h3>Support</h3>
+        <a href="#signup">Contact</a>
+        <a href="#signup">Catering</a>
+        <a href="#about">FAQ</a>
+        <a href="#about">Careers</a>
+      </nav>
+      <div class="footer-social" id="locations">
+        <h3>Find us</h3>
+        <div class="social-icons">
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="TikTok">♪</a>
+          <a href="#" aria-label="Facebook">f</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span id="year"></span> Ronica's friends. All rights reserved. Original Dirty Soda.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="cart.js"></script>
+</body>
+</html>

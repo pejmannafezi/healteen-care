@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu — Ronica's friends</title>
+  <meta name="description" content="The full Ronica's friends menu — dirty sodas, refreshers, summer specials, and sweets & treats. Soda meets flavor." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Announcement bar -->
+  <div class="announce">
+    <span>🐉 Dragon Fruit Summer is back — our biggest menu of the year. <a href="#summer">See the specials</a></span>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="wordmark" aria-label="Ronica's friends home">
+        <span class="wordmark-script">Ronica's</span>
+        <span class="wordmark-sub">friends</span>
+      </a>
+
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+        <a href="menu.html" aria-current="page">Menu</a>
+        <a href="index.html#locations">Locations</a>
+        <a href="index.html#club">Club</a>
+        <a href="index.html#about">About</a>
+        <a href="#dirty" class="btn btn-red nav-cta">Order Now</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Menu hero -->
+    <section class="menu-hero">
+      <div class="container">
+        <h1>The Full Menu</h1>
+        <p>Every sip, every treat — made fresh by Ronica's friends.</p>
+      </div>
+    </section>
+
+    <!-- Sticky category quick-nav -->
+    <nav class="menu-nav" aria-label="Menu categories">
+      <div class="container">
+        <a href="#create">Create Your Own</a>
+        <a href="#dirty">Dirty Sodas</a>
+        <a href="#refreshers">Refreshers</a>
+        <a href="#summer">Summer Specials</a>
+        <a href="#treats">Sweets &amp; Treats</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <!-- Create Your Own -->
+      <section class="menu-section" id="create" aria-labelledby="create-h">
+        <div class="menu-section-head">
+          <h2 id="create-h">Create Your Own</h2>
+          <span class="tagline">Build your perfect sip — base, flavors, fruits &amp; creams.</span>
+        </div>
+        <div class="create-grid">
+          <button class="create-card" data-build="soda" data-base="Soda" data-price="1.59">
+            <div class="create-art">
+              <svg viewBox="0 0 100 150" aria-hidden="true"><path d="M22 38 H78 L72 140 Q71 146 65 146 H35 Q29 146 28 140 Z" fill="#7a4a2b"/><ellipse cx="50" cy="38" rx="29" ry="7" fill="#e8c9a8"/><rect x="46" y="6" width="8" height="40" rx="4" fill="#fffdf8" transform="rotate(12 50 26)"/></svg>
+            </div>
+            <div class="create-body">
+              <span class="create-name">Soda</span>
+              <span class="create-desc">Create Your Own Dirty Soda: Soda + Flavors, Fruits &amp; Creams</span>
+              <span class="create-price">from $1.59</span>
+            </div>
+          </button>
+          <button class="create-card" data-build="water" data-base="Water Cup" data-price="0.00">
+            <div class="create-art">
+              <svg viewBox="0 0 100 150" aria-hidden="true"><path d="M22 38 H78 L72 140 Q71 146 65 146 H35 Q29 146 28 140 Z" fill="#bfe3ef"/><ellipse cx="50" cy="38" rx="29" ry="7" fill="#eafaff"/><rect x="46" y="6" width="8" height="40" rx="4" fill="#fffdf8" transform="rotate(12 50 26)"/></svg>
+            </div>
+            <div class="create-body">
+              <span class="create-name">Water Cup</span>
+              <span class="create-desc">Cup of Water or Ice — add flavors &amp; fruits if you like</span>
+              <span class="create-price">from $0.00</span>
+            </div>
+          </button>
+          <button class="create-card" data-build="reviver" data-base="Reviver" data-price="3.49">
+            <div class="create-art">
+              <svg viewBox="0 0 100 150" aria-hidden="true"><path d="M22 38 H78 L72 140 Q71 146 65 146 H35 Q29 146 28 140 Z" fill="#d4e86b"/><ellipse cx="50" cy="38" rx="29" ry="7" fill="#f0fac2"/><rect x="46" y="6" width="8" height="40" rx="4" fill="#fffdf8" transform="rotate(12 50 26)"/></svg>
+            </div>
+            <div class="create-body">
+              <span class="create-name">Reviver</span>
+              <span class="create-desc">Create Your Own Reviver: Energy + Flavors, Fruits &amp; Creams</span>
+              <span class="create-price">from $3.49</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- Dirty Sodas -->
+      <section class="menu-section" id="dirty" aria-labelledby="dirty-h">
+        <div class="menu-section-head">
+          <h2 id="dirty-h">Dirty Sodas</h2>
+          <span class="tagline">Soda + cream + a little magic.</span>
+        </div>
+        <div class="menu-grid" data-fill="dirty"></div>
+      </section>
+
+      <!-- Refreshers -->
+      <section class="menu-section" id="refreshers" aria-labelledby="refreshers-h">
+        <div class="menu-section-head">
+          <h2 id="refreshers-h">Refreshers</h2>
+          <span class="tagline">Light, fizzy &amp; frozen.</span>
+        </div>
+        <div class="menu-grid" data-fill="refreshers"></div>
+      </section>
+
+      <!-- Summer Specials -->
+      <section class="menu-section" id="summer" aria-labelledby="summer-h">
+        <div class="menu-section-head">
+          <h2 id="summer-h">Summer Specials</h2>
+          <span class="tagline">Dragon Fruit Summer — back for a limited time.</span>
+        </div>
+        <div class="menu-grid" data-fill="summer"></div>
+      </section>
+
+      <!-- Sweets & Treats -->
+      <section class="menu-section" id="treats" aria-labelledby="treats-h">
+        <div class="menu-section-head">
+          <h2 id="treats-h">Sweets &amp; Treats</h2>
+          <span class="tagline">Warm, gooey &amp; made to share.</span>
+        </div>
+        <div class="menu-grid" data-fill="treats"></div>
+      </section>
+
+      <p class="menu-foot-note">Prices may vary by location. Customize any drink with extra cream, purée, or a sugar-free base — just ask a friend.</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="wordmark-script">Ronica's</span>
+        <span class="wordmark-sub">friends</span>
+        <p class="footer-tag">Soda meets flavor.</p>
+      </div>
+      <nav class="footer-col" aria-label="Menu">
+        <h3>Menu</h3>
+        <a href="#dirty">Dirty Sodas</a>
+        <a href="#refreshers">Refreshers</a>
+        <a href="#treats">Sweets &amp; Treats</a>
+        <a href="#summer">Summer Specials</a>
+      </nav>
+      <nav class="footer-col" aria-label="Company">
+        <h3>Company</h3>
+        <a href="index.html#about">Our Story</a>
+        <a href="index.html#locations">Locations</a>
+        <a href="index.html#club">Good Neighbors Club</a>
+        <a href="index.html#about">Franchising</a>
+      </nav>
+      <div class="footer-social">
+        <h3>Find us</h3>
+        <div class="social-icons">
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="TikTok">♪</a>
+          <a href="#" aria-label="Facebook">f</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span id="year"></span> Ronica's friends. All rights reserved. Original Dirty Soda.</p>
+    </div>
+  </footer>
+
+  <script src="menu.js"></script>
+  <script src="cart.js"></script>
+</body>
+</html>

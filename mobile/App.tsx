@@ -23,17 +23,16 @@ import {
   OpenSans_700Bold,
 } from "@expo-google-fonts/open-sans";
 import { AuthProvider } from "./lib/auth";
+import { CartProvider, useCart } from "./lib/cart";
 import { ShopScreen } from "./screens/ShopScreen";
 import { ProductScreen } from "./screens/ProductScreen";
 import { AccountScreen } from "./screens/AccountScreen";
+import { CartScreen } from "./screens/CartScreen";
 import { colors, fonts } from "./lib/theme";
 
-type Tab = "shop" | "account";
+type Tab = "shop" | "cart" | "account";
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>("shop");
-  const [productId, setProductId] = useState<string | null>(null);
-
   const [fontsLoaded] = useFonts({
     PlayfairDisplay_600SemiBold,
     PlayfairDisplay_700Bold,
@@ -52,38 +51,58 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <SafeAreaView style={styles.safe}>
-        <StatusBar style="dark" />
-        {/* Faint site-wide wellness background, like the website */}
-        <Image
-          source={require("./assets/wellness-line.png")}
-          style={styles.bgImage}
-          resizeMode="cover"
-        />
-
-        <View style={styles.topbar}>
-          <Text style={styles.brand}>HEALTEEN CARE</Text>
-          <Text style={styles.tagline}>Natural Healthcare &amp; Herbal Wellness</Text>
-        </View>
-
-        <View style={{ flex: 1 }}>
-          {productId ? (
-            <ProductScreen id={productId} onBack={() => setProductId(null)} />
-          ) : tab === "shop" ? (
-            <ShopScreen onOpenProduct={setProductId} />
-          ) : (
-            <AccountScreen />
-          )}
-        </View>
-
-        {!productId && (
-          <View style={styles.tabbar}>
-            <TabButton label="Shop" active={tab === "shop"} onPress={() => setTab("shop")} />
-            <TabButton label="Account" active={tab === "account"} onPress={() => setTab("account")} />
-          </View>
-        )}
-      </SafeAreaView>
+      <CartProvider>
+        <Shell />
+      </CartProvider>
     </AuthProvider>
+  );
+}
+
+function Shell() {
+  const [tab, setTab] = useState<Tab>("shop");
+  const [productId, setProductId] = useState<string | null>(null);
+  const { totalItems } = useCart();
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar style="dark" />
+      {/* Faint site-wide wellness background, like the website */}
+      <Image
+        source={require("./assets/wellness-line.png")}
+        style={styles.bgImage}
+        resizeMode="cover"
+      />
+
+      <View style={styles.topbar}>
+        <Text style={styles.brand}>HEALTEEN CARE</Text>
+        <Text style={styles.tagline}>Natural Healthcare &amp; Herbal Wellness</Text>
+      </View>
+
+      <View style={{ flex: 1 }}>
+        {productId ? (
+          <ProductScreen id={productId} onBack={() => setProductId(null)} />
+        ) : tab === "shop" ? (
+          <ShopScreen onOpenProduct={setProductId} />
+        ) : tab === "cart" ? (
+          <CartScreen onShop={() => setTab("shop")} />
+        ) : (
+          <AccountScreen />
+        )}
+      </View>
+
+      {!productId && (
+        <View style={styles.tabbar}>
+          <TabButton label="Shop" active={tab === "shop"} onPress={() => setTab("shop")} />
+          <TabButton
+            label="Cart"
+            active={tab === "cart"}
+            onPress={() => setTab("cart")}
+            badge={totalItems}
+          />
+          <TabButton label="Account" active={tab === "account"} onPress={() => setTab("account")} />
+        </View>
+      )}
+    </SafeAreaView>
   );
 }
 
@@ -91,14 +110,23 @@ function TabButton({
   label,
   active,
   onPress,
+  badge,
 }: {
   label: string;
   active: boolean;
   onPress: () => void;
+  badge?: number;
 }) {
   return (
     <Pressable onPress={onPress} style={styles.tab}>
-      <Text style={[styles.tabText, active && styles.tabTextActive]}>{label}</Text>
+      <View>
+        <Text style={[styles.tabText, active && styles.tabTextActive]}>{label}</Text>
+        {badge ? (
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{badge > 99 ? "99+" : badge}</Text>
+          </View>
+        ) : null}
+      </View>
     </Pressable>
   );
 }
@@ -135,4 +163,17 @@ const styles = StyleSheet.create({
   tab: { flex: 1, alignItems: "center", paddingVertical: 14 },
   tabText: { fontSize: 14, fontFamily: fonts.bodySemi, color: colors.muted },
   tabTextActive: { color: colors.forest, fontFamily: fonts.bodyBold },
+  badge: {
+    position: "absolute",
+    top: -8,
+    right: -16,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    paddingHorizontal: 4,
+    backgroundColor: colors.terracotta,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  badgeText: { color: colors.white, fontSize: 10, fontFamily: fonts.bodyBold },
 });
