@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { View, Text, Image, FlatList, Pressable, StyleSheet, Alert } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import { useCart } from "../lib/cart";
@@ -9,6 +10,7 @@ const SITE_URL = "https://healteen-care.vercel.app";
 
 export function CartScreen({ onShop }: { onShop: () => void }) {
   const { items, setQty, remove, totalCents, clear } = useCart();
+  const [busy, setBusy] = useState(false);
   const currency = items[0]?.currency ?? "USD";
 
   if (items.length === 0) {
@@ -22,15 +24,37 @@ export function CartScreen({ onShop }: { onShop: () => void }) {
     );
   }
 
-  const checkout = () => {
-    Alert.alert(
-      "Checkout",
-      "In-app payment is coming soon. You can finish your order securely on our website.",
-      [
-        { text: "Not now", style: "cancel" },
-        { text: "Open website", onPress: () => WebBrowser.openBrowserAsync(`${SITE_URL}/en/shop`) },
-      ]
-    );
+  const checkout = async () => {
+    setBusy(true);
+    try {
+      const res = await fetch(`${SITE_URL}/api/checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
+        }),
+      });
+      const data = (await res.json()) as { url?: string; error?: string };
+      if (!res.ok || !data.url) {
+        Alert.alert("Checkout", data.error ?? "Could not start checkout. Please try again.");
+        return;
+      }
+      // Open Stripe's secure hosted checkout in an in-app browser.
+      await WebBrowser.openBrowserAsync(data.url);
+      // We can't see the payment result from here, so confirm with the customer.
+      Alert.alert(
+        "Order",
+        "If your payment went through, your order is confirmed and you'll get an email. Clear your cart?",
+        [
+          { text: "Keep cart", style: "cancel" },
+          { text: "Clear cart", onPress: clear },
+        ]
+      );
+    } catch {
+      Alert.alert("Checkout", "Network problem. Please check your connection and try again.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -72,7 +96,7 @@ export function CartScreen({ onShop }: { onShop: () => void }) {
           <Text style={styles.totalLabel}>Total</Text>
           <Text style={styles.totalValue}>{formatPrice(totalCents, currency)}</Text>
         </View>
-        <Button title="Checkout" onPress={checkout} />
+        <Button title="Checkout" loading={busy} onPress={checkout} />
         <Pressable onPress={clear} style={{ marginTop: 10 }}>
           <Text style={styles.clear}>Clear cart</Text>
         </Pressable>
