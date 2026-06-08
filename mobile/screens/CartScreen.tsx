@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   imgPlaceholder: { backgroundColor: colors.cream },
   name: { fontSize: 14, fontFamily: fonts.headingSemi, color: colors.forest },
   price: { fontSize: 14, fontFamily: fonts.bodyBold, color: colors.forest, marginTop: 2 },
-  stepper: { flexDirection: "row", alignItems: "center", gap: 10, marginTop: 8 },
+  stepper: { flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 10, marginTop: 8 },
   stepBtn: {
     width: 30, height: 30, borderRadius: 8, borderWidth: 1, borderColor: colors.border,
     alignItems: "center", justifyContent: "center", backgroundColor: colors.cream,

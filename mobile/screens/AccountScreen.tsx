@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Alert, Pressable, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import { useAuth } from "../lib/auth";
 import { Button } from "../components/Button";
 import { colors, fonts } from "../lib/theme";
@@ -14,7 +24,7 @@ export function AccountScreen() {
 
   if (user) {
     return (
-      <View style={styles.wrap}>
+      <View style={styles.centerWrap}>
         <Text style={styles.title}>My Account</Text>
         <Text style={styles.muted}>Signed in as</Text>
         <Text style={styles.email}>{user.email}</Text>
@@ -61,9 +71,14 @@ export function AccountScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.wrap}
+      style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
       <Text style={styles.title}>{mode === "login" ? "Log in" : "Create account"}</Text>
       <Text style={styles.muted}>Use the same account as the website.</Text>
       <View style={{ height: 16 }} />
@@ -110,12 +125,14 @@ export function AccountScreen() {
           {mode === "login" ? "New here? Create an account" : "Already have an account? Log in"}
         </Text>
       </Pressable>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, padding: 24, justifyContent: "center" },
+  centerWrap: { flex: 1, padding: 24, justifyContent: "center" },
+  scrollContent: { flexGrow: 1, padding: 24, justifyContent: "center" },
   title: { fontSize: 28, fontFamily: fonts.heading, color: colors.forest },
   muted: { fontSize: 14, fontFamily: fonts.body, color: colors.muted, marginTop: 4 },
   email: { fontSize: 18, fontFamily: fonts.bodyBold, color: colors.forest, marginTop: 4 },
