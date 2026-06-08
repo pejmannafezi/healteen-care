@@ -28,9 +28,11 @@ import { ShopScreen } from "./screens/ShopScreen";
 import { ProductScreen } from "./screens/ProductScreen";
 import { AccountScreen } from "./screens/AccountScreen";
 import { CartScreen } from "./screens/CartScreen";
+import { HealthScreen } from "./screens/HealthScreen";
+import { ConditionScreen } from "./screens/ConditionScreen";
 import { colors, fonts } from "./lib/theme";
 
-type Tab = "shop" | "cart" | "account";
+type Tab = "shop" | "health" | "cart" | "account";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -61,7 +63,10 @@ export default function App() {
 function Shell() {
   const [tab, setTab] = useState<Tab>("shop");
   const [productId, setProductId] = useState<string | null>(null);
+  const [conditionId, setConditionId] = useState<string | null>(null);
   const { totalItems } = useCart();
+
+  const overlay = productId || conditionId;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -81,8 +86,19 @@ function Shell() {
       <View style={{ flex: 1 }}>
         {productId ? (
           <ProductScreen id={productId} onBack={() => setProductId(null)} />
+        ) : conditionId ? (
+          <ConditionScreen
+            id={conditionId}
+            onBack={() => setConditionId(null)}
+            onOpenProduct={(pid) => {
+              setConditionId(null);
+              setProductId(pid);
+            }}
+          />
         ) : tab === "shop" ? (
           <ShopScreen onOpenProduct={setProductId} />
+        ) : tab === "health" ? (
+          <HealthScreen onOpenCondition={setConditionId} />
         ) : tab === "cart" ? (
           <CartScreen onShop={() => setTab("shop")} />
         ) : (
@@ -90,9 +106,10 @@ function Shell() {
         )}
       </View>
 
-      {!productId && (
+      {!overlay && (
         <View style={styles.tabbar}>
           <TabButton label="Shop" active={tab === "shop"} onPress={() => setTab("shop")} />
+          <TabButton label="Health" active={tab === "health"} onPress={() => setTab("health")} />
           <TabButton
             label="Cart"
             active={tab === "cart"}
