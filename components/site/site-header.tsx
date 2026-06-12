@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { Menu, X, ShoppingCart, User, LayoutDashboard, LogOut } from "lucide-react";
+import { Link, usePathname } from "@/i18n/navigation";
+import { Menu, X, ShoppingCart, User, LayoutDashboard, LogOut, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/app/[locale]/(auth)/actions";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,7 @@ type HeaderUser = { email: string; isAdmin: boolean } | null;
 export function SiteHeader({ user }: { user: HeaderUser }) {
   const t = useTranslations("nav");
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const links = [
     { href: "/shop", label: t("shop") },
@@ -23,17 +24,32 @@ export function SiteHeader({ user }: { user: HeaderUser }) {
     { href: "/webinars", label: t("webinars") },
   ];
 
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-cream/90 backdrop-blur supports-[backdrop-filter]:bg-cream/75">
       <div className="container-page flex h-[var(--header-h)] items-center justify-between gap-4">
-        <Link href="/" className="flex flex-col leading-none">
-          <span className="font-heading text-xl font-bold tracking-tight text-forest">HEALTEEN CARE</span>
-          <span className="font-accent text-[11px] italic text-nature">Natural Healthcare &amp; Herbal Wellness</span>
+        <Link href="/" className="group flex items-center gap-2.5 leading-none" aria-label="Healteen Care home">
+          <span className="flex size-9 items-center justify-center rounded-full bg-forest text-cream transition-transform duration-300 group-hover:scale-105">
+            <Leaf className="size-5" strokeWidth={2} />
+          </span>
+          <span className="flex flex-col">
+            <span className="font-heading text-xl font-bold tracking-tight text-forest">HEALTEEN CARE</span>
+            <span className="font-accent text-[11px] italic text-nature">Natural Healthcare &amp; Herbal Wellness</span>
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="text-sm font-medium text-forest/80 transition-colors hover:text-forest">
+            <Link
+              key={l.href}
+              href={l.href}
+              aria-current={isActive(l.href) ? "page" : undefined}
+              className={cn(
+                "relative text-sm font-medium transition-colors after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-gold after:transition-all after:duration-300 hover:text-forest",
+                isActive(l.href) ? "text-forest after:w-full" : "text-forest/75 after:w-0 hover:after:w-full"
+              )}
+            >
               {l.label}
             </Link>
           ))}

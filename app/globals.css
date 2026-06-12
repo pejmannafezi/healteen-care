@@ -47,4 +47,58 @@
   .eyebrow {
     @apply font-accent italic text-nature text-sm tracking-wide;
   }
+
+  /* Standard section vertical rhythm (design-system §4). */
+  .section {
+    @apply py-16 md:py-24;
+  }
+
+  /* Card hover lift — transform/opacity only (no layout thrash). */
+  .card-hover {
+    @apply transition-all duration-300 ease-out-soft hover:-translate-y-1 hover:shadow-lift;
+  }
+
+  /* Premium frosted surface for botanical hero/feature panels. */
+  .surface-glass {
+    @apply border border-gold/20 bg-white/55 shadow-soft backdrop-blur-sm;
+  }
+
+  /* Centered section heading: eyebrow + title + gold divider. */
+  .section-heading {
+    @apply text-center;
+  }
+}
+
+@layer utilities {
+  /* Respect reduced-motion: disable non-essential animation/transition. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Consistent, always-visible focus ring on interactive elements.
+     ui-ux-pro-max "Accessible & Ethical": 3–4px clear focus ring. */
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #f8f5ee, 0 0 0 4px theme("colors.ring");
+    border-radius: 0.375rem;
+  }
+
+  /* Skip-to-content link — hidden until keyboard-focused (a11y skip-links rule). */
+  .skip-link {
+    @apply absolute left-4 top-3 z-[100] -translate-y-20 rounded-lg bg-forest px-4 py-2
+      text-sm font-medium text-cream shadow-lift transition-transform duration-200;
+  }
+  .skip-link:focus {
+    @apply translate-y-0;
+  }
+  html[dir="rtl"] .skip-link {
+    @apply left-auto right-4;
+  }
 }

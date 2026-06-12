@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Bell, BellRing, Loader2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 function urlBase64ToUint8Array(base64: string) {
   const padding = "=".repeat((4 - (base64.length % 4)) % 4);
@@ -57,34 +58,61 @@ export function NotifyButton() {
 
   if (state === "done") {
     return (
-      <p className="inline-flex items-center gap-2 rounded-lg bg-mint/15 px-4 py-3 font-semibold text-forest" aria-live="polite">
-        <Check className="size-5 text-nature" /> You're subscribed — we'll alert you when we go live!
-      </p>
+      <div
+        className="animate-scale-in flex h-full items-center gap-3 rounded-3xl border border-mint/30 bg-mint/15 p-6"
+        aria-live="polite"
+      >
+        <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-nature/15">
+          <Check className="size-5 text-nature" aria-hidden />
+        </span>
+        <p className="font-semibold text-forest">
+          You&apos;re subscribed — we&apos;ll alert you when we go live!
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="rounded-2xl bg-lime p-5 sm:p-6">
-      <p className="flex items-center gap-2 font-bold text-forest">
-        <BellRing className="size-5" /> Get notified when we go live
-      </p>
-      <p className="mt-1 text-sm text-forest/75">
-        We'll send a browser alert (and email) the moment the live starts.
-      </p>
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-        <Input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="your@email.com (optional)"
-          className="bg-white"
-        />
-        <Button onClick={subscribe} disabled={state === "loading"} className="bg-forest text-lime hover:bg-forest-700">
-          {state === "loading" ? <Loader2 className="animate-spin" /> : <Bell />}
-          Notify me
-        </Button>
+    <div className="relative h-full overflow-hidden rounded-3xl border border-forest/10 bg-lime p-6 shadow-card sm:p-8">
+      {/* Decorative bell watermark */}
+      <div className="pointer-events-none absolute -end-6 -bottom-6 opacity-[0.07]" aria-hidden>
+        <Bell className="size-40 text-forest" strokeWidth={1} />
       </div>
-      {state === "error" && <p className="mt-2 text-sm text-terracotta">Something went wrong. Please try again.</p>}
+      <p className="flex items-center gap-2.5 text-lg font-bold text-forest">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-forest/10" aria-hidden>
+          <BellRing className="size-5" />
+        </span>
+        Get notified when we go live
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-forest/75">
+        We&apos;ll send a browser alert (and email) the moment the live starts.
+      </p>
+      <div className="relative mt-5">
+        <Label htmlFor="notify-email">Email (optional)</Label>
+        <div className="flex flex-col gap-2.5 sm:flex-row">
+          <Input
+            id="notify-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            className="bg-white"
+          />
+          <Button
+            onClick={subscribe}
+            disabled={state === "loading"}
+            className="shrink-0 bg-forest text-lime hover:bg-forest-700"
+          >
+            {state === "loading" ? <Loader2 className="animate-spin" /> : <Bell />}
+            Notify me
+          </Button>
+        </div>
+      </div>
+      {state === "error" && (
+        <p role="alert" className="mt-3 rounded-lg bg-white px-3 py-2 text-sm font-medium text-terracotta">
+          Something went wrong. Please try again.
+        </p>
+      )}
     </div>
   );
 }

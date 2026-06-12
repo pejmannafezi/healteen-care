@@ -29,6 +29,12 @@ const BADGES: { value: string; label: string }[] = [
   { value: "doctor_approved", label: "Doctor-Approved" },
 ];
 
+const CHIP_CLS =
+  "flex cursor-pointer items-center gap-2.5 rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-foreground transition-colors hover:border-nature/50 has-[:checked]:border-nature has-[:checked]:bg-mint/10";
+
+const FILE_CLS =
+  "block w-full max-w-md cursor-pointer rounded-xl border border-dashed border-border bg-muted/40 p-3 text-sm text-muted-foreground transition-colors hover:border-nature/50 file:me-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-forest file:px-4 file:py-2 file:text-xs file:font-semibold file:text-cream";
+
 interface Taxo { id: string; name: string }
 
 type ProductLike = {
@@ -63,16 +69,16 @@ export function ProductForm({
         <input key={url} type="hidden" name="existing_images" value={url} />
       ))}
 
-      <Section title="Basics">
+      <Section title="Basics" description="Name, price and inventory.">
         <Field label="Product name" required>
           <Input name="name" defaultValue={product?.name ?? ""} required />
         </Field>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Type">
             <select
               name="type"
               defaultValue={product?.type ?? "tablet"}
-              className="h-11 w-full rounded-md border border-border bg-white px-3 text-sm"
+              className="block h-11 w-full rounded-lg border border-border bg-white px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
             >
               {TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
@@ -81,7 +87,7 @@ export function ProductForm({
             <Input name="price" type="number" step="0.01" min="0" defaultValue={product ? (product.price_cents! / 100).toFixed(2) : ""} required />
           </Field>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Field label="Size / packaging">
             <Input name="size" defaultValue={product?.size ?? ""} />
           </Field>
@@ -97,7 +103,7 @@ export function ProductForm({
         </Field>
       </Section>
 
-      <Section title="Brand product details">
+      <Section title="Brand product details" description="The story shoppers read on the product page.">
         <Field label="Product history (herb origin story)">
           <Textarea name="history" defaultValue={product?.history ?? ""} />
         </Field>
@@ -118,12 +124,17 @@ export function ProductForm({
         </Field>
       </Section>
 
-      <Section title="Trust signals">
-        <p className="mb-2 text-xs text-forest/60">Only check badges you can back with documentation.</p>
-        <div className="flex flex-wrap gap-4">
+      <Section title="Trust signals" description="Only check badges you can back with documentation.">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {BADGES.map((b) => (
-            <label key={b.value} className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="trust_badges" value={b.value} defaultChecked={badges.has(b.value)} />
+            <label key={b.value} className={CHIP_CLS}>
+              <input
+                type="checkbox"
+                name="trust_badges"
+                value={b.value}
+                defaultChecked={badges.has(b.value)}
+                className="size-4 shrink-0 accent-forest"
+              />
               {b.label}
             </label>
           ))}
@@ -137,16 +148,16 @@ export function ProductForm({
         <CheckboxGrid name="needs" items={needs} selected={selectedNeedIds} />
       </Section>
 
-      <Section title="Images">
+      <Section title="Images" description="PNG/JPG/WebP, up to 6MB each.">
         {images.length > 0 && (
           <div className="mb-3 flex flex-wrap gap-3">
             {images.map((url) => (
-              <div key={url} className="relative size-24 overflow-hidden rounded-lg border border-border">
+              <div key={url} className="relative size-24 overflow-hidden rounded-xl border border-border shadow-card">
                 <Image src={url} alt="" fill sizes="96px" className="object-cover" />
                 <button
                   type="button"
                   onClick={() => setImages((imgs) => imgs.filter((u) => u !== url))}
-                  className="absolute right-1 top-1 rounded-full bg-terracotta p-0.5 text-cream"
+                  className="absolute end-1 top-1 rounded-full bg-terracotta p-1 text-cream transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
                   aria-label="Remove image"
                 >
                   <X className="size-3" />
@@ -155,12 +166,11 @@ export function ProductForm({
             ))}
           </div>
         )}
-        <input type="file" name="images" accept="image/*" multiple className="text-sm" />
-        <p className="mt-1 text-xs text-forest/50">PNG/JPG/WebP, up to 6MB each.</p>
+        <input type="file" name="images" accept="image/*" multiple className={FILE_CLS} />
       </Section>
 
-      <label className="flex items-center gap-2 text-sm font-medium">
-        <input type="checkbox" name="is_active" defaultChecked={product?.is_active ?? true} />
+      <label className="flex w-fit cursor-pointer items-center gap-2.5 rounded-xl border border-border bg-white px-3.5 py-2.5 text-sm font-medium text-forest transition-colors hover:border-nature/50 has-[:checked]:border-nature has-[:checked]:bg-mint/10">
+        <input type="checkbox" name="is_active" defaultChecked={product?.is_active ?? true} className="size-4 accent-forest" />
         Active (visible in shop)
       </label>
 
@@ -171,19 +181,24 @@ export function ProductForm({
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title, description, children,
+}: {
+  title: string; description?: string; children: React.ReactNode;
+}) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6">
-      <h2 className="mb-4 text-lg font-bold text-forest">{title}</h2>
-      <div className="space-y-4">{children}</div>
-    </div>
+    <section className="rounded-2xl border border-border bg-card p-6 shadow-card">
+      <h2 className="text-lg font-bold text-forest">{title}</h2>
+      {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+      <div className="mt-4 space-y-4">{children}</div>
+    </section>
   );
 }
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <Label>{label}{required && <span className="text-terracotta"> *</span>}</Label>
+      <Label>{label}{required && <span aria-hidden className="text-terracotta"> *</span>}</Label>
       {children}
     </div>
   );
@@ -192,11 +207,17 @@ function Field({ label, required, children }: { label: string; required?: boolea
 function CheckboxGrid({ name, items, selected }: { name: string; items: Taxo[]; selected: string[] }) {
   const set = new Set(selected);
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((it) => (
-        <label key={it.id} className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name={name} value={it.id} defaultChecked={set.has(it.id)} />
-          {it.name}
+        <label key={it.id} className={CHIP_CLS}>
+          <input
+            type="checkbox"
+            name={name}
+            value={it.id}
+            defaultChecked={set.has(it.id)}
+            className="size-4 shrink-0 accent-forest"
+          />
+          <span className="min-w-0 truncate">{it.name}</span>
         </label>
       ))}
     </div>

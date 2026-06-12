@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { Video, Phone, Lock, Loader2 } from "lucide-react";
+import { Video, Phone, Lock, Loader2, Check, CalendarDays, CalendarX2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn, formatPrice } from "@/lib/utils";
 
@@ -63,22 +63,36 @@ export function ConsultationBooking({
 
   if (slots.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-cream p-8 text-center text-forest/60">
-        No times are open right now. Please check back soon.
-      </p>
+      <div className="mx-auto max-w-lg rounded-2xl border border-dashed border-border bg-cream p-10 text-center">
+        <CalendarX2 className="mx-auto size-10 text-nature/50" strokeWidth={1.2} aria-hidden />
+        <p className="mt-4 font-semibold text-forest">
+          No times are open right now. Please check back soon.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+    <div className="grid items-start gap-8 lg:grid-cols-[1fr_340px] lg:gap-12">
       {/* Slots */}
-      <div>
-        <h2 className="mb-4 text-lg font-bold">1. Choose a time</h2>
-        <div className="space-y-5">
+      <section className="animate-fade-up" aria-labelledby="booking-step-time">
+        <h2 id="booking-step-time" className="flex items-center gap-3 text-xl font-bold text-forest">
+          <span
+            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gold/15 font-accent text-base italic text-gold-600"
+            aria-hidden
+          >
+            1
+          </span>
+          Choose a time
+        </h2>
+        <div className="mt-6 space-y-7">
           {Object.entries(byDate).map(([date, daySlots]) => (
             <div key={date}>
-              <p className="mb-2 text-sm font-semibold text-forest/70">{date}</p>
-              <div className="flex flex-wrap gap-2">
+              <p className="mb-3 inline-flex items-center gap-2 text-sm font-semibold text-forest/70">
+                <CalendarDays className="size-4 text-nature" aria-hidden />
+                {date}
+              </p>
+              <div className="flex flex-wrap gap-2.5">
                 {daySlots.map((s) => {
                   const time = new Date(s.starts_at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
                   const active = slotId === s.id;
@@ -86,13 +100,16 @@ export function ConsultationBooking({
                     <button
                       key={s.id}
                       onClick={() => setSlotId(s.id)}
+                      aria-pressed={active}
                       className={cn(
-                        "rounded-lg border px-4 py-2 text-sm font-medium transition-colors",
+                        "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-5 py-2 text-sm font-medium transition-all duration-200",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-cream",
                         active
-                          ? "border-forest bg-forest text-cream"
-                          : "border-border bg-card text-forest hover:border-nature/50"
+                          ? "border-forest bg-forest text-cream shadow-sm"
+                          : "border-border bg-card text-forest shadow-card hover:-translate-y-0.5 hover:border-nature/50 hover:shadow-soft"
                       )}
                     >
+                      {active && <Check className="size-4" aria-hidden />}
                       {time}
                     </button>
                   );
@@ -101,39 +118,78 @@ export function ConsultationBooking({
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Type + pay */}
-      <aside className="h-fit rounded-2xl border border-border bg-card p-6 lg:sticky lg:top-24">
-        <h2 className="mb-3 text-lg font-bold">2. How would you like to meet?</h2>
-        <div className="grid grid-cols-2 gap-2">
-          {(["video", "phone"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setType(t)}
-              className={cn(
-                "flex flex-col items-center gap-1 rounded-lg border px-3 py-3 text-sm font-medium capitalize transition-colors",
-                type === t ? "border-forest bg-forest/5 text-forest" : "border-border text-forest/70 hover:border-nature/40"
-              )}
-            >
-              {t === "video" ? <Video className="size-5" /> : <Phone className="size-5" />}
-              {t}
-            </button>
-          ))}
+      <aside
+        className="animate-fade-in h-fit rounded-3xl border border-gold/20 bg-card p-6 shadow-soft md:p-7 lg:sticky lg:top-24"
+        aria-labelledby="booking-step-type"
+      >
+        <h2 id="booking-step-type" className="flex items-center gap-3 text-lg font-bold text-forest">
+          <span
+            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gold/15 font-accent text-base italic text-gold-600"
+            aria-hidden
+          >
+            2
+          </span>
+          How would you like to meet?
+        </h2>
+        <div className="mt-4 grid grid-cols-2 gap-2.5">
+          {(["video", "phone"] as const).map((t) => {
+            const active = type === t;
+            return (
+              <button
+                key={t}
+                onClick={() => setType(t)}
+                aria-pressed={active}
+                className={cn(
+                  "relative flex min-h-[4.5rem] flex-col items-center justify-center gap-1.5 rounded-2xl border px-3 py-3 text-sm font-semibold capitalize transition-all duration-200",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-cream",
+                  active
+                    ? "border-forest bg-forest/5 text-forest shadow-card"
+                    : "border-border text-forest/70 hover:border-nature/40 hover:text-forest"
+                )}
+              >
+                {active && (
+                  <span
+                    className="absolute end-2 top-2 flex size-4 items-center justify-center rounded-full bg-forest text-cream"
+                    aria-hidden
+                  >
+                    <Check className="size-3" />
+                  </span>
+                )}
+                {t === "video" ? (
+                  <Video className="size-5" aria-hidden />
+                ) : (
+                  <Phone className="size-5" aria-hidden />
+                )}
+                {t}
+              </button>
+            );
+          })}
         </div>
 
-        <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
-          <span className="text-sm text-forest/70">Total</span>
-          <span className="text-xl font-bold text-forest">{formatPrice(priceCents / 100)}</span>
+        <div className="mt-6">
+          <div className="gold-divider" aria-hidden />
+          <div className="mt-4 flex items-center justify-between">
+            <span className="text-sm text-forest/70">Total</span>
+            <span className="text-2xl font-bold text-forest">{formatPrice(priceCents / 100)}</span>
+          </div>
         </div>
 
-        {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
+        {error && (
+          <p role="alert" className="mt-3 rounded-lg bg-terracotta/10 px-3 py-2 text-sm font-medium text-terracotta">
+            {error}
+          </p>
+        )}
 
-        <Button onClick={book} disabled={!slotId || loading} size="lg" className="mt-4 w-full">
+        <Button onClick={book} disabled={!slotId || loading} size="lg" className="mt-5 w-full">
           {loading ? <Loader2 className="animate-spin" /> : <Lock />}
           {!isLoggedIn ? "Log in to book" : loading ? "Redirecting…" : "Book & Pay"}
         </Button>
-        {!slotId && <p className="mt-2 text-center text-xs text-forest/50">Select a time to continue.</p>}
+        {!slotId && (
+          <p className="mt-3 text-center text-xs text-forest/60">Select a time to continue.</p>
+        )}
       </aside>
     </div>
   );

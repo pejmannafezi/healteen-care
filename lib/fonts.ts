@@ -1,17 +1,23 @@
-import { Playfair_Display, Open_Sans, Lora, Vazirmatn } from "next/font/google";
+import { Lora, Raleway, Vazirmatn } from "next/font/google";
 
-/** Headlines — brand guide: Playfair Display (Georgia fallback). */
-export const fontHeading = Playfair_Display({
+/**
+ * Headlines — Lora (organic serif curves).
+ * "Wellness Calm" pairing from ui-ux-pro-max: best for wellness / organic brands.
+ */
+export const fontHeading = Lora({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
   variable: "--font-heading",
   display: "swap",
 });
 
-/** Body — brand guide: Open Sans (Calibri fallback). */
-export const fontBody = Open_Sans({
+/**
+ * Body — Raleway (elegant, light, clean sans).
+ * "Wellness Calm" pairing from ui-ux-pro-max.
+ */
+export const fontBody = Raleway({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-body",
   display: "swap",
 });

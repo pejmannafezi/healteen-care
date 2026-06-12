@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { Leaf } from "lucide-react";
 
 export function SiteFooter() {
   const t = useTranslations("footer");
@@ -7,11 +8,20 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-20 border-t border-border bg-forest text-cream/90">
-      <div className="container-page grid gap-10 py-14 md:grid-cols-4">
+    <footer className="relative mt-20 overflow-hidden border-t border-gold/20 bg-forest text-cream/90">
+      {/* Botanical watermark */}
+      <div className="pointer-events-none absolute -right-16 -bottom-16 opacity-[0.04]" aria-hidden>
+        <Leaf className="size-72 text-cream" strokeWidth={1} />
+      </div>
+      <div className="container-page relative grid gap-10 py-14 md:grid-cols-4">
         <div className="md:col-span-1">
-          <p className="font-heading text-lg font-bold text-cream">HEALTEEN CARE</p>
-          <p className="mt-1 font-accent text-sm italic text-mint">{t("tagline")}</p>
+          <div className="flex items-center gap-2.5">
+            <span className="flex size-9 items-center justify-center rounded-full bg-cream/10 text-mint">
+              <Leaf className="size-5" strokeWidth={2} />
+            </span>
+            <p className="font-heading text-lg font-bold text-cream">HEALTEEN CARE</p>
+          </div>
+          <p className="mt-3 font-accent text-sm italic text-mint">{t("tagline")}</p>
         </div>
 
         <FooterCol title={t("shop")}>

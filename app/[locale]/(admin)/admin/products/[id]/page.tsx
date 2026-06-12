@@ -1,4 +1,5 @@
 import { Link } from "@/i18n/navigation";
+import { ArrowLeft } from "lucide-react";
 import { adminGetProduct, adminTaxonomies } from "@/lib/services/admin";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { ProductForm } from "@/components/admin/product-form";
@@ -30,10 +31,14 @@ export default async function ProductEditorPage({
 
   return (
     <div>
-      <Link href="/admin/products" className="text-sm text-nature hover:underline">
-        ← Back to products
+      <Link
+        href="/admin/products"
+        className="inline-flex min-h-9 items-center gap-1.5 rounded-full text-sm font-medium text-nature transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <ArrowLeft className="size-3.5 rtl:rotate-180" /> Back to products
       </Link>
-      <h2 className="mb-6 mt-2 text-2xl font-bold">{isNew ? "Add product" : "Edit product"}</h2>
+      <h2 className="mb-1 mt-2 text-2xl font-bold text-forest">{isNew ? "Add product" : "Edit product"}</h2>
+      <div className="gold-divider mb-6 mt-3 max-w-[10rem]" />
       <ProductForm
         product={product}
         categories={categories}

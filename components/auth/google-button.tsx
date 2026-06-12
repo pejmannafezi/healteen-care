@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
@@ -48,12 +49,12 @@ export function GoogleButton({ label = "Continue with Google" }: { label?: strin
     <Button
       type="button"
       variant="outline"
-      className="w-full"
+      className="h-12 w-full border-border bg-white font-semibold text-forest shadow-card hover:border-forest/30 hover:bg-cream/70"
       onClick={signInWithGoogle}
       disabled={busy}
     >
-      <GoogleIcon />
-      {busy ? "…" : label}
+      {busy ? <Loader2 className="animate-spin" aria-hidden /> : <GoogleIcon />}
+      {label}
     </Button>
   );
 }

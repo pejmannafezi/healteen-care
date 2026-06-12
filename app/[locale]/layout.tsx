@@ -45,8 +45,11 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir} suppressHydrationWarning className={fontVariables}>
       <body className="min-h-dvh flex flex-col bg-cream">
         <NextIntlClientProvider messages={messages}>
+          <a href="#main-content" className="skip-link">
+            {locale === "fa" ? "پرش به محتوای اصلی" : "Skip to main content"}
+          </a>
           <SiteHeader user={headerUser} />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1">{children}</main>
           <SiteFooter />
           <ChatWidget />
         </NextIntlClientProvider>

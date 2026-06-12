@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, PackageX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart, type CartItem } from "@/lib/store/cart";
 
@@ -18,7 +18,12 @@ export function CardAddToCart({
 
   if (!inStock) {
     return (
-      <Button size="sm" disabled className="w-full border border-border bg-transparent text-forest/40">
+      <Button
+        disabled
+        variant="outline"
+        className="w-full border-dashed text-forest/50"
+      >
+        <PackageX aria-hidden="true" />
         Out of stock
       </Button>
     );
@@ -26,15 +31,16 @@ export function CardAddToCart({
 
   return (
     <Button
-      size="sm"
-      className="w-full bg-nature text-cream hover:bg-forest font-semibold shadow-sm transition-all"
+      variant="honey"
+      className="w-full font-bold"
+      aria-live="polite"
       onClick={() => {
         add(item);
         setAdded(true);
         setTimeout(() => setAdded(false), 1500);
       }}
     >
-      {added ? <Check /> : <ShoppingCart />}
+      {added ? <Check aria-hidden="true" /> : <ShoppingCart aria-hidden="true" />}
       {added ? "Added to cart" : "Add to cart"}
     </Button>
   );

@@ -6,15 +6,17 @@ export function LivePlayer({ youtubeUrl }: { youtubeUrl: string | null }) {
 
   if (!embed) {
     return (
-      <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 rounded-xl border border-border bg-forest text-cream">
-        <Radio className="size-10 text-mint" />
+      <div className="relative flex aspect-video w-full flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-gold/20 bg-gradient-to-br from-forest to-forest-700 px-6 text-center text-cream shadow-soft">
+        <span className="flex size-16 items-center justify-center rounded-full bg-cream/10">
+          <Radio className="size-8 text-mint" aria-hidden />
+        </span>
         <p className="font-semibold">The stream will appear here when we go live.</p>
       </div>
     );
   }
 
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-black">
+    <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-gold/20 bg-black shadow-soft">
       <iframe
         src={embed}
         title="Healteen Care live stream"

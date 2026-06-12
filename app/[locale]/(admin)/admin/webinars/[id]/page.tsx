@@ -1,4 +1,5 @@
 import { Link } from "@/i18n/navigation";
+import { ArrowLeft } from "lucide-react";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { saveWebinar } from "../actions";
 import { Button } from "@/components/ui/button";
@@ -26,44 +27,51 @@ export default async function WebinarEditorPage({
 
   return (
     <div>
-      <Link href="/admin/webinars" className="text-sm text-nature hover:underline">← Back to classes</Link>
-      <h2 className="mb-6 mt-2 text-2xl font-bold">{isNew ? "New class" : "Edit class"}</h2>
+      <Link
+        href="/admin/webinars"
+        className="inline-flex min-h-9 items-center gap-1.5 rounded-full text-sm font-medium text-nature transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <ArrowLeft className="size-3.5 rtl:rotate-180" /> Back to classes
+      </Link>
+      <h2 className="mb-1 mt-2 text-2xl font-bold text-forest">{isNew ? "New class" : "Edit class"}</h2>
+      <div className="gold-divider mb-6 mt-3 max-w-[10rem]" />
+
       <Card>
-        <CardContent className="p-6">
-          <form action={saveWebinar} className="space-y-4">
+        <CardContent className="p-6 pt-6">
+          <form action={saveWebinar} className="space-y-5">
             <input type="hidden" name="id" value={w?.id ?? "new"} />
             <div>
-              <Label>Title</Label>
-              <Input name="title" defaultValue={w?.title ?? ""} required />
+              <Label htmlFor="wb-title">Title</Label>
+              <Input id="wb-title" name="title" defaultValue={w?.title ?? ""} required />
             </div>
             <div>
-              <Label>Description</Label>
-              <Textarea name="description" defaultValue={w?.description ?? ""} rows={5} />
+              <Label htmlFor="wb-desc">Description</Label>
+              <Textarea id="wb-desc" name="description" defaultValue={w?.description ?? ""} rows={5} />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <Label>Date & time</Label>
-                <Input name="scheduled_at" type="datetime-local" defaultValue={toLocalInput(w?.scheduled_at ?? null)} />
+                <Label htmlFor="wb-when">Date &amp; time</Label>
+                <Input id="wb-when" name="scheduled_at" type="datetime-local" defaultValue={toLocalInput(w?.scheduled_at ?? null)} />
               </div>
               <div>
-                <Label>Duration (minutes)</Label>
-                <Input name="duration_min" type="number" min="0" defaultValue={w?.duration_min ?? 60} />
+                <Label htmlFor="wb-duration">Duration (minutes)</Label>
+                <Input id="wb-duration" name="duration_min" type="number" min="0" defaultValue={w?.duration_min ?? 60} />
               </div>
               <div>
-                <Label>Price (USD, 0 = free)</Label>
-                <Input name="price" type="number" step="0.01" min="0" defaultValue={((w?.price_cents ?? 0) / 100).toFixed(2)} />
+                <Label htmlFor="wb-price">Price (USD, 0 = free)</Label>
+                <Input id="wb-price" name="price" type="number" step="0.01" min="0" defaultValue={((w?.price_cents ?? 0) / 100).toFixed(2)} />
               </div>
               <div>
-                <Label>Capacity (optional)</Label>
-                <Input name="capacity" type="number" min="0" defaultValue={w?.capacity ?? ""} />
+                <Label htmlFor="wb-capacity">Capacity (optional)</Label>
+                <Input id="wb-capacity" name="capacity" type="number" min="0" defaultValue={w?.capacity ?? ""} />
               </div>
             </div>
             <div>
-              <Label>Recording URL (after the class)</Label>
-              <Input name="recording_url" defaultValue={w?.recording_url ?? ""} placeholder="https://youtube.com/..." />
+              <Label htmlFor="wb-recording">Recording URL (after the class)</Label>
+              <Input id="wb-recording" name="recording_url" defaultValue={w?.recording_url ?? ""} placeholder="https://youtube.com/..." />
             </div>
-            <label className="flex items-center gap-2 text-sm font-medium">
-              <input type="checkbox" name="is_published" defaultChecked={w?.is_published ?? false} />
+            <label className="flex w-fit cursor-pointer items-center gap-2.5 rounded-xl border border-border bg-white px-3.5 py-2.5 text-sm font-medium text-forest transition-colors hover:border-nature/50 has-[:checked]:border-nature has-[:checked]:bg-mint/10">
+              <input type="checkbox" name="is_published" defaultChecked={w?.is_published ?? false} className="size-4 accent-forest" />
               Published (visible on the site)
             </label>
             <Button type="submit">Save class</Button>

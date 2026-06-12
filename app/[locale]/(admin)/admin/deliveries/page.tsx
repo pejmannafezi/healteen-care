@@ -1,8 +1,9 @@
 import { Package, Truck, CheckCircle2, AlertTriangle, MapPin, CalendarRange } from "lucide-react";
 import { getDeliveryReport } from "@/lib/services/admin";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { PrintButton } from "@/components/admin/print-button";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, cn } from "@/lib/utils";
 
 export const metadata = { title: "Deliveries" };
 
@@ -45,9 +46,9 @@ export default async function AdminDeliveriesPage({
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-bold">Deliveries</h2>
-          <p className="text-sm text-forest/60">
+        <div className="min-w-0">
+          <h2 className="text-lg font-bold text-forest">Deliveries</h2>
+          <p className="mt-1 max-w-prose text-sm leading-relaxed text-muted-foreground">
             Live fulfillment snapshot — stock left, what&apos;s in the post, what&apos;s
             delivered, and everyone still owed a delivery (name · date · address).
           </p>
@@ -57,43 +58,48 @@ export default async function AdminDeliveriesPage({
 
       {/* ── Date-range report filter (chosen date → now) ── */}
       <Card className="print:hidden">
-        <CardContent className="p-4">
+        <CardContent className="p-4 pt-4">
           <form method="GET" className="flex flex-wrap items-end gap-3">
-            <label className="text-xs font-medium text-forest/70">
+            <label className="block text-xs font-medium text-forest/80">
               Report from date
               <input
                 type="date"
                 name="from"
                 defaultValue={from ?? ""}
-                className="mt-1 block h-10 rounded-md border border-border bg-white px-3 text-sm"
+                className="mt-1.5 block h-11 rounded-lg border border-border bg-white px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
               />
             </label>
-            <span className="mb-2.5 text-sm text-forest/60">→ now</span>
+            <span className="mb-3 text-sm text-muted-foreground">→ now</span>
             <button
               type="submit"
-              className="inline-flex h-10 items-center gap-2 rounded-md bg-forest px-4 text-sm font-medium text-cream transition-colors hover:bg-forest-700"
+              className="inline-flex h-11 items-center gap-2 rounded-full bg-forest px-5 text-sm font-semibold text-cream shadow-sm transition-colors hover:bg-forest-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
             >
               <CalendarRange className="size-4" /> Get report
             </button>
             {from && (
-              <a href="?" className="mb-2.5 text-sm text-nature hover:underline">Clear</a>
+              <a
+                href="?"
+                className="mb-3 rounded-full text-sm font-medium text-nature hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Clear
+              </a>
             )}
           </form>
         </CardContent>
       </Card>
 
-      <p className="flex items-center gap-2 text-sm text-forest/70">
-        <CalendarRange className="size-4 text-nature" />
+      <p className="flex flex-wrap items-center gap-2 text-sm text-forest/75">
+        <CalendarRange className="size-4 shrink-0 text-nature" aria-hidden />
         Showing orders for: <span className="font-semibold text-forest">{rangeLabel}</span>
-        <span className="text-forest/40">({r.totalOrders} order{r.totalOrders === 1 ? "" : "s"})</span>
+        <span className="text-muted-foreground">({r.totalOrders} order{r.totalOrders === 1 ? "" : "s"})</span>
       </p>
 
       {/* ── Stat row ── */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat icon={<Package />} label="Units in stock" value={String(r.totalStock)} />
-        <Stat icon={<Truck />} label="In post / out for delivery" value={String(r.inPost.length)} />
-        <Stat icon={<CheckCircle2 />} label="Delivered" value={String(r.delivered.length)} />
-        <Stat icon={<MapPin />} label="Not delivered yet" value={String(r.notDelivered.length)} />
+        <Stat icon={<Package />} label="Units in stock" value={String(r.totalStock)} tone="forest" />
+        <Stat icon={<Truck />} label="In post / out for delivery" value={String(r.inPost.length)} tone="gold" />
+        <Stat icon={<CheckCircle2 />} label="Delivered" value={String(r.delivered.length)} tone="nature" />
+        <Stat icon={<MapPin />} label="Not delivered yet" value={String(r.notDelivered.length)} tone="terracotta" />
       </div>
 
       {/* ── Products left (always current, not date-filtered) ── */}
@@ -105,17 +111,19 @@ export default async function AdminDeliveriesPage({
             {r.products.map((p) => {
               const low = p.stock_qty <= p.low_stock_threshold;
               return (
-                <li key={p.id} className="flex items-center justify-between gap-4 p-4 text-sm">
-                  <span className="flex-1 truncate text-forest/80">
+                <li key={p.id} className="flex items-center justify-between gap-4 px-5 py-3.5 text-sm">
+                  <span className="min-w-0 flex-1 truncate text-forest/85">
                     {p.name}
-                    {!p.is_active && <span className="ml-2 text-xs text-forest/40">(inactive)</span>}
+                    {!p.is_active && <span className="ms-2 text-xs text-muted-foreground">(inactive)</span>}
                   </span>
                   {low && (
-                    <span className="flex items-center gap-1 rounded-full bg-terracotta/10 px-2 py-0.5 text-xs text-terracotta">
-                      <AlertTriangle className="size-3" /> Low
-                    </span>
+                    <Badge variant="terracotta" className="shrink-0">
+                      <AlertTriangle aria-hidden /> Low
+                    </Badge>
                   )}
-                  <span className="w-20 text-right font-semibold text-forest">{p.stock_qty} left</span>
+                  <span className="w-20 shrink-0 text-end font-semibold tabular-nums text-forest">
+                    {p.stock_qty} left
+                  </span>
                 </li>
               );
             })}
@@ -132,18 +140,18 @@ export default async function AdminDeliveriesPage({
             {r.inPost.map((o) => {
               const addr = o.shipping_address as Addr;
               return (
-                <li key={o.id} className="space-y-1 p-4 text-sm">
+                <li key={o.id} className="space-y-1.5 px-5 py-4 text-sm">
                   <div className="flex items-center justify-between gap-3">
-                    <span className="font-mono text-xs text-forest/50">#{o.id.slice(0, 8).toUpperCase()}</span>
-                    <span className="flex-1 truncate font-medium text-forest/85">{addr?.name ?? o.email}</span>
-                    <span className="text-xs text-forest/60">ETA {fmtDate(o.eta)}</span>
+                    <span className="font-mono text-xs text-forest/60">#{o.id.slice(0, 8).toUpperCase()}</span>
+                    <span className="min-w-0 flex-1 truncate font-medium text-forest/90">{addr?.name ?? o.email}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">ETA {fmtDate(o.eta)}</span>
                   </div>
-                  <p className="text-xs text-forest/60">
+                  <p className="text-xs text-muted-foreground">
                     {o.tracking_carrier ?? "Carrier ?"} · {o.tracking_number ?? "no tracking #"}
                     {o.tracking_status ? ` · ${o.tracking_status}` : ""}
                   </p>
-                  <p className="flex items-start gap-1 text-xs text-forest/55">
-                    <MapPin className="mt-0.5 size-3 shrink-0" />
+                  <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
+                    <MapPin className="mt-0.5 size-3 shrink-0" aria-hidden />
                     <span>{formatAddress(addr)}</span>
                   </p>
                 </li>
@@ -162,13 +170,13 @@ export default async function AdminDeliveriesPage({
             {r.delivered.map((o) => {
               const addr = o.shipping_address as Addr;
               return (
-                <li key={o.id} className="flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
-                  <span className="font-mono text-xs text-forest/50">#{o.id.slice(0, 8).toUpperCase()}</span>
-                  <span className="min-w-[8rem] flex-1 truncate text-forest/85">{addr?.name ?? o.email}</span>
-                  <span className="flex items-center gap-1 text-xs text-nature">
-                    <CheckCircle2 className="size-3" /> Delivered {fmtDate(o.updated_at)}
+                <li key={o.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-sm">
+                  <span className="font-mono text-xs text-forest/60">#{o.id.slice(0, 8).toUpperCase()}</span>
+                  <span className="min-w-[8rem] flex-1 truncate text-forest/90">{addr?.name ?? o.email}</span>
+                  <span className="flex shrink-0 items-center gap-1 text-xs font-medium text-nature">
+                    <CheckCircle2 className="size-3" aria-hidden /> Delivered {fmtDate(o.updated_at)}
                   </span>
-                  <span className="w-20 text-right font-semibold text-forest">
+                  <span className="w-20 shrink-0 text-end font-semibold tabular-nums text-forest">
                     {formatPrice(o.total_cents / 100, o.currency)}
                   </span>
                 </li>
@@ -187,19 +195,17 @@ export default async function AdminDeliveriesPage({
             {r.notDelivered.map((o) => {
               const addr = o.shipping_address as Addr;
               return (
-                <li key={o.id} className="space-y-1 p-4 text-sm">
+                <li key={o.id} className="space-y-1.5 px-5 py-4 text-sm">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-xs text-forest/50">#{o.id.slice(0, 8).toUpperCase()}</span>
-                    <span className="flex-1 truncate font-medium text-forest/85">
-                      {addr?.name ?? "—"} <span className="text-forest/50">· {o.email}</span>
+                    <span className="font-mono text-xs text-forest/60">#{o.id.slice(0, 8).toUpperCase()}</span>
+                    <span className="min-w-0 flex-1 truncate font-medium text-forest/90">
+                      {addr?.name ?? "—"} <span className="text-muted-foreground">· {o.email}</span>
                     </span>
-                    <span className="text-xs text-forest/60">Ordered {fmtDate(o.created_at)}</span>
-                    <span className="rounded-full bg-gold/15 px-2 py-0.5 text-xs text-gold-600">
-                      {STATUS_LABEL[o.status] ?? o.status}
-                    </span>
+                    <span className="shrink-0 text-xs text-muted-foreground">Ordered {fmtDate(o.created_at)}</span>
+                    <Badge variant="gold" className="shrink-0">{STATUS_LABEL[o.status] ?? o.status}</Badge>
                   </div>
-                  <p className="flex items-start gap-1 text-xs text-forest/60">
-                    <MapPin className="mt-0.5 size-3 shrink-0" />
+                  <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
+                    <MapPin className="mt-0.5 size-3 shrink-0" aria-hidden />
                     <span>
                       {formatAddress(addr)}
                       {addr?.phone ? ` · ☎ ${addr.phone}` : ""}
@@ -215,16 +221,27 @@ export default async function AdminDeliveriesPage({
   );
 }
 
-function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+const TONES = {
+  forest: "bg-forest/10 text-forest",
+  gold: "bg-gold/15 text-gold-600",
+  nature: "bg-nature/10 text-nature",
+  terracotta: "bg-terracotta/10 text-terracotta",
+} as const;
+
+function Stat({
+  icon, label, value, tone,
+}: {
+  icon: React.ReactNode; label: string; value: string; tone: keyof typeof TONES;
+}) {
   return (
     <Card>
-      <CardContent className="flex items-center gap-4 p-5">
-        <div className="flex size-11 items-center justify-center rounded-xl bg-nature/10 text-nature [&_svg]:size-5">
+      <CardContent className="flex items-center gap-4 p-5 pt-5">
+        <div className={cn("flex size-11 shrink-0 items-center justify-center rounded-xl [&_svg]:size-5", TONES[tone])}>
           {icon}
         </div>
-        <div>
-          <p className="text-xs uppercase tracking-wide text-forest/50">{label}</p>
-          <p className="text-xl font-bold text-forest">{value}</p>
+        <div className="min-w-0">
+          <p className="truncate text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+          <p className="mt-0.5 text-2xl font-bold tabular-nums leading-tight text-forest">{value}</p>
         </div>
       </CardContent>
     </Card>
@@ -233,18 +250,16 @@ function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; va
 
 function Section({ title, count, children }: { title: string; count: number; children: React.ReactNode }) {
   return (
-    <div>
-      <div className="mb-3 flex items-center gap-2">
-        <h2 className="text-lg font-bold">{title}</h2>
-        <span className="rounded-full bg-forest/10 px-2 py-0.5 text-xs font-medium text-forest/70">{count}</span>
+    <section>
+      <div className="mb-3 flex items-center gap-2.5">
+        <h2 className="text-lg font-bold text-forest">{title}</h2>
+        <Badge variant="outline" className="tabular-nums">{count}</Badge>
       </div>
-      <Card>
-        <CardContent className="p-0">{children}</CardContent>
-      </Card>
-    </div>
+      <Card className="overflow-hidden">{children}</Card>
+    </section>
   );
 }
 
 function Empty({ children }: { children: React.ReactNode }) {
-  return <p className="p-6 text-center text-sm text-forest/60">{children}</p>;
+  return <p className="p-8 text-center text-sm text-muted-foreground">{children}</p>;
 }

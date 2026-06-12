@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { setRequestLocale } from "next-intl/server";
-import { FileText, Leaf } from "lucide-react";
+import { FileText, Leaf, BadgeCheck, Sprout } from "lucide-react";
 import { getAbout } from "@/lib/services/content";
+import { Button } from "@/components/ui/button";
 
 export const metadata = { title: "About" };
 
@@ -15,40 +16,71 @@ export default async function AboutPage({
   const about = await getAbout();
 
   return (
-    <div className="container-page py-16">
-      <div className="grid items-start gap-12 lg:grid-cols-[320px_1fr]">
-        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-nature/10 to-mint/10">
-          {about.image_url ? (
-            <Image src={about.image_url} alt={about.headline ?? "About"} fill sizes="320px" className="object-cover" priority />
-          ) : (
-            <div className="flex h-full items-center justify-center">
-              <Leaf className="size-16 text-nature/40" strokeWidth={1} />
-            </div>
-          )}
-        </div>
+    <div className="relative overflow-hidden">
+      {/* Soft botanical backdrop */}
+      <div aria-hidden className="pointer-events-none absolute -top-20 -end-24 opacity-[0.04]">
+        <Leaf className="size-96 text-forest" strokeWidth={0.75} />
+      </div>
 
-        <div>
-          <p className="eyebrow">About</p>
-          <h1 className="mt-2 text-4xl font-bold">{about.headline ?? "About Pejman Nafezi"}</h1>
-          <div className="gold-divider my-5 max-w-xs" />
-          {about.body ? (
-            <div className="prose-healteen whitespace-pre-line text-lg leading-relaxed text-forest/80">
-              {about.body}
+      <div className="container-page section relative">
+        <div className="grid items-start gap-12 lg:grid-cols-[360px_1fr] lg:gap-16">
+          {/* Portrait panel */}
+          <div className="lg:sticky lg:top-28">
+            <div className="surface-glass animate-fade-up rounded-3xl p-3">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-nature/10 to-mint/10">
+                {about.image_url ? (
+                  <Image
+                    src={about.image_url}
+                    alt={about.headline ?? "About"}
+                    fill
+                    sizes="360px"
+                    className="object-cover"
+                    priority
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <Leaf className="size-16 text-nature/40" strokeWidth={1} />
+                  </div>
+                )}
+              </div>
             </div>
-          ) : (
-            <p className="text-forest/60">A personal introduction is coming here soon.</p>
-          )}
 
-          {about.resume_url && (
-            <a
-              href={about.resume_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 rounded-md border border-forest/30 px-5 py-2.5 text-sm font-semibold text-forest hover:bg-forest/5"
-            >
-              <FileText className="size-4" /> View résumé
-            </a>
-          )}
+            {/* Quiet credibility chips under the portrait */}
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-nature/10 px-3 py-1.5 text-xs font-semibold text-nature">
+                <Sprout className="size-3.5" /> Herbal wellness
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/15 px-3 py-1.5 text-xs font-semibold text-gold-600">
+                <BadgeCheck className="size-3.5" /> Trusted guidance
+              </span>
+            </div>
+          </div>
+
+          {/* Story */}
+          <div className="animate-fade-up">
+            <p className="eyebrow">About</p>
+            <h1 className="mt-2 text-balance text-4xl font-bold text-forest md:text-5xl">
+              {about.headline ?? "About Pejman Nafezi"}
+            </h1>
+            <div className="gold-divider my-6 max-w-xs" />
+            {about.body ? (
+              <div className="prose-healteen max-w-[70ch] whitespace-pre-line text-lg leading-relaxed text-forest/80">
+                {about.body}
+              </div>
+            ) : (
+              <p className="text-forest/60">A personal introduction is coming here soon.</p>
+            )}
+
+            {about.resume_url && (
+              <div className="mt-10">
+                <Button asChild variant="outline" size="lg">
+                  <a href={about.resume_url} target="_blank" rel="noopener noreferrer">
+                    <FileText className="size-4" /> View résumé
+                  </a>
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

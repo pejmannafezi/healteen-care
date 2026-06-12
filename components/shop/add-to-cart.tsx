@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, PackageX, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart, type CartItem } from "@/lib/store/cart";
 
@@ -19,7 +19,8 @@ export function AddToCart({
 
   if (!inStock) {
     return (
-      <Button disabled size="lg" className="w-full sm:w-auto">
+      <Button disabled size="lg" variant="outline" className="w-full border-dashed text-forest/50 sm:w-auto">
+        <PackageX aria-hidden="true" />
         Out of stock
       </Button>
     );
@@ -29,19 +30,21 @@ export function AddToCart({
     <div className="flex flex-wrap gap-3">
       <Button
         size="lg"
+        variant="honey"
+        aria-live="polite"
         onClick={() => {
           add(item);
           setAdded(true);
           setTimeout(() => setAdded(false), 1800);
         }}
-        className="w-full sm:w-auto"
+        className="w-full font-bold sm:w-auto sm:min-w-[12rem]"
       >
-        {added ? <Check /> : <ShoppingCart />}
+        {added ? <Check aria-hidden="true" /> : <ShoppingCart aria-hidden="true" />}
         {added ? "Added" : "Add to cart"}
       </Button>
       <Button
         size="lg"
-        variant="gold"
+        variant="primary"
         onClick={() => {
           add(item);
           router.push("/cart");
@@ -49,6 +52,7 @@ export function AddToCart({
         className="w-full sm:w-auto"
       >
         Buy now
+        <ArrowRight aria-hidden="true" className="rtl:-scale-x-100" />
       </Button>
     </div>
   );

@@ -25,7 +25,10 @@ const ITEMS = [
 export function AdminNav() {
   const pathname = usePathname();
   return (
-    <nav className="flex flex-row gap-1 overflow-x-auto lg:flex-col">
+    <nav
+      aria-label="Admin sections"
+      className="flex flex-row gap-1 overflow-x-auto rounded-2xl border border-border bg-card p-2 shadow-card lg:flex-col"
+    >
       {ITEMS.map((it) => {
         const active = it.exact ? pathname === it.href : pathname.startsWith(it.href);
         const Icon = it.icon;
@@ -33,12 +36,20 @@ export function AdminNav() {
           <Link
             key={it.href}
             href={it.href}
+            aria-current={active ? "page" : undefined}
             className={cn(
-              "flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              active ? "bg-forest text-cream" : "text-forest/80 hover:bg-forest/5"
+              "group flex min-h-11 items-center gap-2.5 whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+              active
+                ? "bg-forest text-cream shadow-sm"
+                : "text-forest/75 hover:bg-forest/5 hover:text-forest"
             )}
           >
-            <Icon className="size-4" />
+            <Icon
+              className={cn(
+                "size-4 shrink-0 transition-colors",
+                active ? "text-gold" : "text-nature/70 group-hover:text-nature"
+              )}
+            />
             {it.label}
           </Link>
         );
