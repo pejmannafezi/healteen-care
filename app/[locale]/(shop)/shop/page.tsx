@@ -1,7 +1,9 @@
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getProductTypes, getHealthNeeds, getAllProducts } from "@/lib/services/catalog";
+import { getSiteContent } from "@/lib/services/site-content";
 import { ProductCard } from "@/components/shop/product-card";
+import { Editable } from "@/components/site/editable";
 import { Leaf, HeartPulse, FlaskConical, ShieldCheck, Sprout, ArrowRight } from "lucide-react";
 
 export const metadata = { title: "Shop" };
@@ -14,10 +16,11 @@ export default async function ShopPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [types, needs, products] = await Promise.all([
+  const [types, needs, products, content] = await Promise.all([
     getProductTypes(),
     getHealthNeeds(),
     getAllProducts(),
+    getSiteContent(locale),
   ]);
 
   return (
@@ -34,15 +37,18 @@ export default async function ShopPage({
 
         <div className="container-page relative z-10 py-20 lg:py-24">
           <header className="max-w-2xl animate-fade-up">
-            <p className="font-accent text-lg italic text-gold">Shop</p>
-            <h1 className="mt-2 text-4xl font-bold tracking-tight text-cream [text-wrap:balance] sm:text-5xl">
-              Lab-tested herbal products
-            </h1>
+            <Editable as="p" id="shop.eyebrow" locale={locale} className="font-accent text-lg italic text-gold"
+              value={content.text("shop.eyebrow", "Shop")} />
+            <Editable as="h1" id="shop.title" locale={locale}
+              className="mt-2 text-4xl font-bold tracking-tight text-cream [text-wrap:balance] sm:text-5xl"
+              value={content.text("shop.title", "Lab-tested herbal products")} />
             <div className="gold-divider mt-5 max-w-[10rem]" />
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-cream/80">
-              Find what's right for you — browse by product type or by the health need you want
-              to support.
-            </p>
+            <Editable as="p" type="rich" id="shop.subtitle" locale={locale}
+              className="mt-5 max-w-xl text-base leading-relaxed text-cream/80"
+              value={content.text(
+                "shop.subtitle",
+                "Find what's right for you — browse by product type or by the health need you want to support."
+              )} />
 
             {/* Trust strip */}
             <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-cream/90">

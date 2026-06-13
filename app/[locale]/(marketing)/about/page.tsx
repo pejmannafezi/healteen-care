@@ -2,6 +2,8 @@ import Image from "next/image";
 import { setRequestLocale } from "next-intl/server";
 import { FileText, Leaf, BadgeCheck, Sprout } from "lucide-react";
 import { getAbout } from "@/lib/services/content";
+import { getSiteContent } from "@/lib/services/site-content";
+import { Editable } from "@/components/site/editable";
 import { Button } from "@/components/ui/button";
 
 export const metadata = { title: "About" };
@@ -13,7 +15,7 @@ export default async function AboutPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const about = await getAbout();
+  const [about, content] = await Promise.all([getAbout(), getSiteContent(locale)]);
 
   return (
     <div className="relative overflow-hidden">
@@ -58,18 +60,15 @@ export default async function AboutPage({
 
           {/* Story */}
           <div className="animate-fade-up">
-            <p className="eyebrow">About</p>
-            <h1 className="mt-2 text-balance text-4xl font-bold text-forest md:text-5xl">
-              {about.headline ?? "About Pejman Nafezi"}
-            </h1>
+            <Editable as="p" id="about.eyebrow" locale={locale} className="eyebrow"
+              value={content.text("about.eyebrow", "About")} />
+            <Editable as="h1" id="about.heading" locale={locale}
+              className="mt-2 text-balance text-4xl font-bold text-forest md:text-5xl"
+              value={content.text("about.heading", about.headline ?? "About Pejman Nafezi")} />
             <div className="gold-divider my-6 max-w-xs" />
-            {about.body ? (
-              <div className="prose-healteen max-w-[70ch] whitespace-pre-line text-lg leading-relaxed text-forest/80">
-                {about.body}
-              </div>
-            ) : (
-              <p className="text-forest/60">A personal introduction is coming here soon.</p>
-            )}
+            <Editable as="div" type="rich" id="about.body" locale={locale}
+              className="prose-healteen max-w-[70ch] whitespace-pre-line text-lg leading-relaxed text-forest/80"
+              value={content.text("about.body", about.body ?? "A personal introduction is coming here soon.")} />
 
             {about.resume_url && (
               <div className="mt-10">

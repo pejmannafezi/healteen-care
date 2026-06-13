@@ -24,6 +24,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getMyOrders } from "@/lib/services/account";
 import { getMyConsultations } from "@/lib/services/consultations";
 import { signOutAction } from "../../(auth)/actions";
+import { ChangePassword } from "@/components/account/change-password";
 import { Button } from "@/components/ui/button";
 import { Badge, type BadgeProps } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -159,6 +160,8 @@ export default async function AccountPage() {
                   </a>
                 </div>
               )}
+
+              <ChangePassword />
             </CardContent>
           </Card>
 

@@ -33,14 +33,24 @@ export const TOOL_DEFINITIONS: Anthropic.Tool[] = [
 const money = (c: number, cur = "USD") =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: cur }).format(c / 100);
 
+const SEARCH_FIELDS = ["name", "short_description", "benefits", "symptoms_supported"];
+// Drop noise words so "joint pain" still matches a "healthy joints" product.
+const STOPWORDS = new Set(["for", "the", "and", "pain", "help", "with", "you", "what", "have", "need", "want"]);
+
 async function searchProducts(query: string) {
   const db = createSupabaseAdminClient();
-  const q = (query || "").slice(0, 80);
+  const raw = (query || "").slice(0, 80).toLowerCase();
+  // Match ANY meaningful word in ANY field (broader recall for recommendations).
+  const tokens = raw.split(/[^a-z0-9]+/).filter((t) => t.length >= 3 && !STOPWORDS.has(t)).slice(0, 6);
+  const terms = tokens.length ? tokens : [raw.trim()].filter(Boolean);
+  if (terms.length === 0) return "Please tell me what you'd like help with (e.g. sleep, stress, joints).";
+
+  const orConds = terms.flatMap((t) => SEARCH_FIELDS.map((f) => `${f}.ilike.%${t}%`)).join(",");
   const { data } = await db
     .from("products")
     .select("name, slug, price_cents, currency, short_description, benefits, contraindications, stock_qty")
     .eq("is_active", true)
-    .or(`name.ilike.%${q}%,short_description.ilike.%${q}%,benefits.ilike.%${q}%,symptoms_supported.ilike.%${q}%`)
+    .or(orConds)
     .limit(5);
 
   if (!data || data.length === 0) return "No matching products found.";

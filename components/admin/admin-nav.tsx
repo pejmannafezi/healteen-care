@@ -3,12 +3,13 @@
 import { Link, usePathname } from "@/i18n/navigation";
 import {
   LayoutDashboard, Package, ClipboardList, Activity, Megaphone, CalendarClock,
-  Newspaper, GraduationCap, Images, User, Radio, Truck,
+  Newspaper, GraduationCap, Images, User, Radio, Truck, FileEdit,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
+  { href: "/admin/content", label: "Site Content", icon: FileEdit },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/orders", label: "Orders", icon: ClipboardList },
   { href: "/admin/deliveries", label: "Deliveries", icon: Truck },

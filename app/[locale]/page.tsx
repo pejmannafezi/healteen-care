@@ -5,6 +5,8 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { StoriesBar } from "@/components/site/stories-bar";
 import { getStories, getActiveOrNextLive } from "@/lib/services/content";
+import { getSiteContent, type SiteContent } from "@/lib/services/site-content";
+import { Editable } from "@/components/site/editable";
 import { LiveBanner } from "@/components/live/live-banner";
 import {
   ShieldCheck,
@@ -26,17 +28,21 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [stories, live] = await Promise.all([getStories(), getActiveOrNextLive()]);
+  const [stories, live, content] = await Promise.all([
+    getStories(),
+    getActiveOrNextLive(),
+    getSiteContent(locale),
+  ]);
   return (
     <>
       {live?.status === "live" && <LiveBanner title={live.title} />}
       <StoriesBar stories={stories} />
-      <HomeContent />
+      <HomeContent content={content} locale={locale} />
     </>
   );
 }
 
-function HomeContent() {
+function HomeContent({ content, locale }: { content: SiteContent; locale: string }) {
   const t = useTranslations("home");
 
   return (
@@ -50,21 +56,24 @@ function HomeContent() {
 
         <div className="container-page relative grid items-center gap-12 py-20 lg:grid-cols-2 lg:py-28">
           <div className="animate-fade-up">
-            <p className="eyebrow">{t("hero.eyebrow")}</p>
-            <h1 className="mt-4 text-balance text-4xl font-bold leading-[1.1] text-forest md:text-5xl lg:text-6xl">
-              {t("hero.title")}
-            </h1>
+            <Editable as="p" id="hero.eyebrow" locale={locale} className="eyebrow"
+              value={content.text("hero.eyebrow", t("hero.eyebrow"))} />
+            <Editable as="h1" id="hero.title" locale={locale}
+              className="mt-4 text-balance text-4xl font-bold leading-[1.1] text-forest md:text-5xl lg:text-6xl"
+              value={content.text("hero.title", t("hero.title"))} />
             <div className="gold-divider mt-6 max-w-[10rem]" />
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75">{t("hero.subtitle")}</p>
+            <Editable as="p" type="rich" id="hero.subtitle" locale={locale}
+              className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75"
+              value={content.text("hero.subtitle", t("hero.subtitle"))} />
             <div className="mt-9 flex flex-wrap gap-4">
               <Link href="/shop">
                 <Button size="lg" className="shadow-sm transition-transform hover:scale-[1.02]">
-                  {t("hero.ctaShop")} <ArrowRight className="size-5 rtl:rotate-180" />
+                  {content.text("hero.ctaShop", t("hero.ctaShop"))} <ArrowRight className="size-5 rtl:rotate-180" />
                 </Button>
               </Link>
               <Link href="/consultation">
                 <Button size="lg" variant="outline" className="transition-transform hover:scale-[1.02]">
-                  {t("hero.ctaConsult")}
+                  {content.text("hero.ctaConsult", t("hero.ctaConsult"))}
                 </Button>
               </Link>
             </div>
@@ -74,20 +83,20 @@ function HomeContent() {
           <div className="relative w-full max-w-md justify-self-center lg:max-w-lg">
             <div className="surface-glass relative aspect-square w-full rounded-3xl p-3 transition-transform duration-700 hover:scale-[1.02]">
               <div className="relative h-full w-full overflow-hidden rounded-2xl">
-                <Image
-                  src="/botanical-hero.png"
+                <Editable
+                  type="image" id="hero.image" locale={locale}
+                  value={content.image("hero.image", "/botanical-hero.png")}
                   alt="Healteen Care natural ingredients"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  fill sizes="(max-width: 768px) 100vw, 50vw" priority
                   className="object-cover"
-                  priority
                 />
               </div>
             </div>
             {/* Floating quality chip */}
             <div className="surface-glass absolute -bottom-4 start-6 flex items-center gap-2 rounded-full px-4 py-2 animate-fade-in">
               <BadgeCheck className="size-4 text-gold-600" />
-              <span className="text-xs font-semibold text-forest">Lab-tested quality</span>
+              <Editable as="span" id="hero.chip" locale={locale} className="text-xs font-semibold text-forest"
+                value={content.text("hero.chip", "Lab-tested quality")} />
             </div>
           </div>
         </div>
@@ -109,13 +118,18 @@ function HomeContent() {
       <section className="section relative overflow-hidden border-b border-border bg-gradient-to-r from-cream via-honey/5 to-[#EFEADD]/30">
         <div className="container-page grid items-center gap-12 md:grid-cols-2">
           <div className="flex flex-col justify-center">
-            <p className="font-accent text-lg italic text-gold-600">Featured collection</p>
-            <h2 className="mt-2 text-balance text-4xl font-bold text-forest md:text-5xl">The Wellness Line</h2>
+            <Editable as="p" id="wellness.eyebrow" locale={locale} className="font-accent text-lg italic text-gold-600"
+              value={content.text("wellness.eyebrow", "Featured collection")} />
+            <Editable as="h2" id="wellness.title" locale={locale}
+              className="mt-2 text-balance text-4xl font-bold text-forest md:text-5xl"
+              value={content.text("wellness.title", "The Wellness Line")} />
             <div className="gold-divider mt-5 max-w-[10rem]" />
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-forest/80">
-              Our lab-tested herbal essentials — oils, drops, teas and supplements — crafted to
-              help support pain relief, calm, and healthy aging.
-            </p>
+            <Editable as="p" type="rich" id="wellness.body" locale={locale}
+              className="mt-5 max-w-md text-lg leading-relaxed text-forest/80"
+              value={content.text(
+                "wellness.body",
+                "Our lab-tested herbal essentials — oils, drops, teas and supplements — crafted to help support pain relief, calm, and healthy aging."
+              )} />
             <div className="mt-8">
               <Link href="/shop" className="inline-block">
                 <Button size="lg" variant="primary" className="shadow-sm transition-transform hover:scale-[1.02]">
@@ -126,11 +140,11 @@ function HomeContent() {
           </div>
           <div className="surface-glass relative min-h-[320px] overflow-hidden rounded-3xl p-2.5 md:min-h-[460px]">
             <div className="relative h-full min-h-[300px] w-full overflow-hidden rounded-2xl md:min-h-[440px]">
-              <Image
-                src="/wellness-line.png"
+              <Editable
+                type="image" id="wellness.image" locale={locale}
+                value={content.image("wellness.image", "/wellness-line.png")}
                 alt="Healteen Care wellness line"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                fill sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover transition-transform duration-700 hover:scale-[1.03]"
               />
             </div>
